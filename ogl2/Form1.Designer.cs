@@ -62,18 +62,20 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.AutoSize = true;
+            this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox1.Controls.Add(this.clearButton);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Location = new System.Drawing.Point(609, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(179, 85);
+            this.groupBox1.Size = new System.Drawing.Size(179, 100);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Лаб. 1";
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(51, 56);
+            this.clearButton.Location = new System.Drawing.Point(51, 58);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 2;
@@ -88,12 +90,12 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.glControl1);
-            this.Icon = Properties.Resources.opengl_logo;
+            this.Icon = global::ogl2.Properties.Resources.opengl_logo;
             this.Name = "Form1";
             this.Text = "Печеркин А. С. 0381 Лаб. 1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
