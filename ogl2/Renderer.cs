@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace ogl2
 {
@@ -25,14 +26,36 @@ namespace ogl2
             {"GL_QUAD_STRIP",PrimitiveType.QuadStrip },
             {"GL_POLYGON",PrimitiveType.Polygon }
         };
+        public static Dictionary<string, CullFaceMode> CullFaceModes = new Dictionary<string, CullFaceMode>
+        {
+            {"GL_FRONT",CullFaceMode.Front },
+            {"GL_BACK",CullFaceMode.Back },
+            {"GL_FRONT_AND_BACK",CullFaceMode.FrontAndBack }
+        };
+        public static Dictionary<string, PolygonMode> PolygonModes = new Dictionary<string, PolygonMode>
+        {
+            {"GL_FILL",PolygonMode.Fill },
+            {"GL_POINT",PolygonMode.Point },
+            {"GL_LINE",PolygonMode.Line }
+        };
         private static Color[] _colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
 
         private GLControl _viewport;
-        private PrimitiveType selectedPrimitive;
+        public PrimitiveType SelectedPrimitive;
         private List<Vector2> _vertices = new List<Vector2>();
+        private float _primitiveSize;
+        private bool _cull;
+        private CullFaceMode _cullFace;
+        private MaterialFace _polygonFace;
+        private PolygonMode _polygonMode;
         public Renderer()
         {
-            selectedPrimitive = PrimitiveType.Points;
+            SelectedPrimitive = PrimitiveType.Points;
+            _primitiveSize = 1;
+            _cull = false;
+            _polygonMode = PolygonMode.Fill;
+            _polygonFace = MaterialFace.Front;
+            _cullFace=CullFaceMode.Front;
         }
 
         public void Resize()
@@ -54,9 +77,28 @@ namespace ogl2
 
         public void SetPrimitiveType(PrimitiveType primitiveType)
         {
-            selectedPrimitive = primitiveType;
+            SelectedPrimitive = primitiveType;
         }
 
+        public void SetPrimitiveSize(float value)
+        {
+            _primitiveSize = value;
+        }
+    
+        public void EnableCulling(bool enabled)
+        {
+            _cull=enabled;
+        }
+
+        public void SetCullingFace(CullFaceMode cullFaceMode)
+        {
+            _cullFace = cullFaceMode;
+        }
+        public void SetPolygonMode(CullFaceMode cullFaceMode,PolygonMode mode)
+        {
+            _polygonFace = (MaterialFace)cullFaceMode;
+            _polygonMode = mode;
+        }
         public void SetViewport(GLControl viewport)
         {
             if(_viewport == null)
@@ -66,20 +108,25 @@ namespace ogl2
         {            
             _viewport.MakeCurrent();
             GL.ClearColor(Color4.MidnightBlue);
-
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Begin(selectedPrimitive);
+            GL.LineWidth(_primitiveSize);
+            GL.PointSize(_primitiveSize);
+            if (_cull) GL.Enable(EnableCap.CullFace);
+            GL.CullFace(_cullFace);
+            GL.PolygonMode(_polygonFace, _polygonMode);
 
+            GL.Begin(SelectedPrimitive);
             GL.Color4(Color4.Silver);
             for (int i = 0; i < _vertices.Count; i++)
             {
                 var color = _colors[i % _colors.Length];
-                GL.Color4(color.R, color.G, color.B, 1.0f);
+                GL.Color4(color.R/255f, color.G / 255f, color.B / 255f, 1.0f);
                 GL.Vertex2(_vertices[i].X, _vertices[i].Y);
             }
             GL.End();
 
+            GL.Disable(EnableCap.CullFace);
             _viewport.SwapBuffers();
         }
     }
