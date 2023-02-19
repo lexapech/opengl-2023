@@ -46,6 +46,8 @@ namespace ogl2
             this.polygonMode2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.polygonMode1 = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -86,7 +88,7 @@ namespace ogl2
             this.groupBox1.Controls.Add(this.flowLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(609, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(179, 311);
+            this.groupBox1.Size = new System.Drawing.Size(179, 344);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Лаб. 1";
@@ -100,7 +102,7 @@ namespace ogl2
             this.flowLayoutPanel1.Controls.Add(this.panel3);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 19);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 284);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 319);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // clearButton
@@ -191,18 +193,20 @@ namespace ogl2
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.polygonMode2);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.polygonMode1);
             this.panel3.Location = new System.Drawing.Point(3, 193);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(164, 82);
+            this.panel3.Size = new System.Drawing.Size(164, 114);
             this.panel3.TabIndex = 7;
             // 
             // polygonMode2
             // 
             this.polygonMode2.FormattingEnabled = true;
-            this.polygonMode2.Location = new System.Drawing.Point(0, 52);
+            this.polygonMode2.Location = new System.Drawing.Point(0, 87);
             this.polygonMode2.Name = "polygonMode2";
             this.polygonMode2.Size = new System.Drawing.Size(149, 21);
             this.polygonMode2.TabIndex = 5;
@@ -220,11 +224,29 @@ namespace ogl2
             // polygonMode1
             // 
             this.polygonMode1.FormattingEnabled = true;
-            this.polygonMode1.Location = new System.Drawing.Point(0, 25);
+            this.polygonMode1.Location = new System.Drawing.Point(0, 47);
             this.polygonMode1.Name = "polygonMode1";
             this.polygonMode1.Size = new System.Drawing.Size(149, 21);
             this.polygonMode1.TabIndex = 4;
             this.polygonMode1.SelectedIndexChanged += new System.EventHandler(this.polygonMode1_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "FRONT";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 71);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "BACK";
             // 
             // Form1
             // 
@@ -267,6 +289,8 @@ namespace ogl2
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox polygonMode1;
         private System.Windows.Forms.ComboBox polygonMode2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
 

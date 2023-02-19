@@ -25,7 +25,7 @@ namespace ogl2
             cullingCheckBox.Checked = false;
             cullingComboBox.Items.AddRange(Renderer.CullFaceModes.Keys.ToArray());          
             polygonMode1.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());       
-            polygonMode2.Items.AddRange(Renderer.CullFaceModes.Keys.ToArray());
+            polygonMode2.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());
             
         }
    
@@ -108,13 +108,13 @@ namespace ogl2
         }
         private void UpdatePolygonMode()
         {
-            CullFaceMode face;
-            PolygonMode polygonMode;
+            PolygonMode polygonModeFront;
+            PolygonMode polygonModeBack;
             if (polygonMode2.SelectedItem == null) return;
-            Renderer.CullFaceModes.TryGetValue((string)polygonMode2.SelectedItem, out face);
+            Renderer.PolygonModes.TryGetValue((string)polygonMode2.SelectedItem, out polygonModeBack);
             if (polygonMode1.SelectedItem == null) return;
-            Renderer.PolygonModes.TryGetValue((string)polygonMode1.SelectedItem, out polygonMode);
-            _renderer.SetPolygonMode(face, polygonMode);
+            Renderer.PolygonModes.TryGetValue((string)polygonMode1.SelectedItem, out polygonModeFront);
+            _renderer.SetPolygonMode(polygonModeFront, polygonModeBack);
             _renderer.Render();
         }
     }

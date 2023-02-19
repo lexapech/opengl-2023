@@ -46,16 +46,16 @@ namespace ogl2
         private float _primitiveSize;
         private bool _cull;
         private CullFaceMode _cullFace;
-        private MaterialFace _polygonFace;
-        private PolygonMode _polygonMode;
+        private PolygonMode _polygonModeFront;
+        private PolygonMode _polygonModeBack;
         public Renderer()
         {
             SelectedPrimitive = PrimitiveType.Points;
             _primitiveSize = 1;
             _cull = false;
-            _polygonMode = PolygonMode.Fill;
-            _polygonFace = MaterialFace.Front;
-            _cullFace=CullFaceMode.Front;
+            _polygonModeFront = PolygonMode.Fill;
+            _polygonModeBack = PolygonMode.Fill;
+            _cullFace = CullFaceMode.Front;
         }
 
         public void Resize()
@@ -87,17 +87,17 @@ namespace ogl2
     
         public void EnableCulling(bool enabled)
         {
-            _cull=enabled;
+            _cull = enabled;
         }
 
         public void SetCullingFace(CullFaceMode cullFaceMode)
         {
             _cullFace = cullFaceMode;
         }
-        public void SetPolygonMode(CullFaceMode cullFaceMode,PolygonMode mode)
+        public void SetPolygonMode(PolygonMode front, PolygonMode back)
         {
-            _polygonFace = (MaterialFace)cullFaceMode;
-            _polygonMode = mode;
+            _polygonModeFront = front;
+            _polygonModeBack = back;
         }
         public void SetViewport(GLControl viewport)
         {
@@ -114,8 +114,8 @@ namespace ogl2
             GL.PointSize(_primitiveSize);
             if (_cull) GL.Enable(EnableCap.CullFace);
             GL.CullFace(_cullFace);
-            GL.PolygonMode(_polygonFace, _polygonMode);
-
+            GL.PolygonMode(MaterialFace.Front, _polygonModeFront);
+            GL.PolygonMode(MaterialFace.Back, _polygonModeBack);
             GL.Begin(SelectedPrimitive);
             GL.Color4(Color4.Silver);
             for (int i = 0; i < _vertices.Count; i++)
