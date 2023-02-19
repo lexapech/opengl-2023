@@ -1,13 +1,8 @@
-﻿using OpenTK.Graphics;
+﻿using System.Collections.Generic;
 using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace ogl2
 {
@@ -41,7 +36,7 @@ namespace ogl2
         private static Color[] _colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
 
         private GLControl _viewport;
-        public PrimitiveType SelectedPrimitive;
+        public PrimitiveType _selectedPrimitive;
         private List<Vector2> _vertices = new List<Vector2>();
         private float _primitiveSize;
         private bool _cull;
@@ -50,7 +45,7 @@ namespace ogl2
         private PolygonMode _polygonModeBack;
         public Renderer()
         {
-            SelectedPrimitive = PrimitiveType.Points;
+            _selectedPrimitive = PrimitiveType.Points;
             _primitiveSize = 1;
             _cull = false;
             _polygonModeFront = PolygonMode.Fill;
@@ -77,7 +72,7 @@ namespace ogl2
 
         public void SetPrimitiveType(PrimitiveType primitiveType)
         {
-            SelectedPrimitive = primitiveType;
+            _selectedPrimitive = primitiveType;
         }
 
         public void SetPrimitiveSize(float value)
@@ -108,7 +103,7 @@ namespace ogl2
         {            
             _viewport.MakeCurrent();
             GL.ClearColor(Color4.MidnightBlue);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
 
             GL.LineWidth(_primitiveSize);
             GL.PointSize(_primitiveSize);
@@ -116,8 +111,7 @@ namespace ogl2
             GL.CullFace(_cullFace);
             GL.PolygonMode(MaterialFace.Front, _polygonModeFront);
             GL.PolygonMode(MaterialFace.Back, _polygonModeBack);
-            GL.Begin(SelectedPrimitive);
-            GL.Color4(Color4.Silver);
+            GL.Begin(_selectedPrimitive);
             for (int i = 0; i < _vertices.Count; i++)
             {
                 var color = _colors[i % _colors.Length];
