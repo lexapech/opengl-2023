@@ -26,6 +26,9 @@ namespace ogl2
             cullingComboBox.Items.AddRange(Renderer.CullFaceModes.Keys.ToArray());          
             polygonMode1.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());       
             polygonMode2.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());
+            alphaComboBox.Items.AddRange(Renderer.AlphaModes.Keys.ToArray());
+            blendSource.Items.AddRange(Renderer.BlendingFactorSrcs.Keys.ToArray());
+            blendDestination.Items.AddRange(Renderer.BlendingFactorDests.Keys.ToArray());
             
         }
    
@@ -36,6 +39,9 @@ namespace ogl2
             cullingComboBox.SelectedIndex = 0;
             polygonMode1.SelectedIndex = 0;
             polygonMode2.SelectedIndex = 0;
+            alphaComboBox.SelectedIndex = 0;
+            blendSource.SelectedIndex = 0;
+            blendDestination.SelectedIndex = 0;
             glControl1_Resize(sender, EventArgs.Empty);
         }
 
@@ -52,9 +58,7 @@ namespace ogl2
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            pos = new Vector2(pos.X / glControl1.ClientSize.Width, pos.Y / glControl1.ClientSize.Height);
-            pos = pos * 2 - Vector2.One;
-            _renderer.AddPoint(pos);
+            _renderer.MouseDown(pos);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -115,6 +119,86 @@ namespace ogl2
             if (polygonMode1.SelectedItem == null) return;
             Renderer.PolygonModes.TryGetValue((string)polygonMode1.SelectedItem, out polygonModeFront);
             _renderer.SetPolygonMode(polygonModeFront, polygonModeBack);
+            _renderer.Render();
+        }
+
+        private void glControl1_MouseUp(object sender, MouseEventArgs e)
+        {
+            var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
+            _renderer.MouseUp(pos);
+        }
+
+        private void glControl1_MouseMove(object sender, MouseEventArgs e)
+        {
+            var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
+            _renderer.MouseMove(pos);
+        }
+
+        private void scissorCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _renderer.EnableScissor(scissorCheckBox.Checked);
+            _renderer.Render();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            _renderer.ClearScissorSelection();
+            _renderer.SetMouseMode(Renderer.Mode.ScissorSelection);
+        }
+
+        private void scissorReset_Click(object sender, EventArgs e)
+        {
+            _renderer.ClearScissorSelection();
+        }
+
+        private void alphaComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AlphaFunction alphaFunction;
+            if (alphaComboBox.SelectedItem == null) return;
+            Renderer.AlphaModes.TryGetValue((string)alphaComboBox.SelectedItem, out alphaFunction);
+            _renderer.SetAlphaFunction(alphaFunction);
+            _renderer.Render();
+        }
+
+        private void alphaTrackBar_Scroll(object sender, EventArgs e)
+        {
+            var value = (float)alphaTrackBar.Value / alphaTrackBar.Maximum;
+            _renderer.SetAlphaRef(value);
+            _renderer.Render();
+        }
+
+        private void alphaCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _renderer.EnableAlpha(alphaCheckBox.Checked);
+            _renderer.Render();
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void blendSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BlendingFactorSrc blendingFactor;
+            if (blendSource.SelectedItem == null) return;
+            Renderer.BlendingFactorSrcs.TryGetValue((string)blendSource.SelectedItem, out blendingFactor);
+            _renderer.SetBlendingSource((BlendingFactor)blendingFactor);
+            _renderer.Render();   
+        }
+
+        private void blendDestination_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BlendingFactorSrc blendingFactor;
+            if (blendDestination.SelectedItem == null) return;
+            Renderer.BlendingFactorSrcs.TryGetValue((string)blendDestination.SelectedItem, out blendingFactor);
+            _renderer.SetBlendingDestination((BlendingFactor)blendingFactor);
+            _renderer.Render();
+        }
+
+        private void blendCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _renderer.enableBlending(blendCheckBox.Checked);
             _renderer.Render();
         }
     }
