@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
-using System.Text;
 using System;
-using System.Drawing.Drawing2D;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace ogl2
 {
@@ -19,43 +17,45 @@ namespace ogl2
         private static Color[] _colors = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
         private static float[] _alphas = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f};
         private GLControl _viewport;
-        public PrimitiveType _selectedPrimitive;
+        public PrimitiveType SelectedPrimitive;
         private List<Vector2> _vertices = new List<Vector2>();
-        private float _primitiveSize;
-        private bool _cull;
-        private bool _scissor;
-        private bool _alpha;
-        private bool _blend;
-        private CullFaceMode _cullFace;
-        private PolygonMode _polygonModeFront;
-        private PolygonMode _polygonModeBack;
+        public float PrimitiveSize { private get; set; }
+        public bool CullingEnabled { private get; set; }
+        public bool ScissorEnabled { private get; set; }
+        public bool AlphaTestEnabled { private get; set; }
+        public bool BlendingEnabled { private get; set; }
+        public CullFaceMode CullFace { private get; set; }
+        public PolygonMode PolygonModeFront { private get; set; }
+        public PolygonMode PolygonModeBack { private get; set; }
+        public AlphaFunction AlphaFunction { private get; set; }
+        public float AlphaRef { private get; set; }
+        public BlendingFactor BlendingFactorSrc { private get; set; }
+        public BlendingFactor BlendingFactorDest { private get; set; }
+
         private Rectangle _scissorRegion;
         private Rectangle _scissorDragRect;
-        private Mode _mode;
+        public Mode MouseMode { private get; set; }
         private Vector2 _scissorStartPos;
         private Vector2 _scissorEndPos;
         private bool _scissorSelectionDrag;
-        private AlphaFunction _alphaFunction;
-        private float _alphaRef;
-        private BlendingFactor _blendingFactorSrc;
-        private BlendingFactor _blendingFactorDest;
+        
         public Renderer()
         {
-            _selectedPrimitive = PrimitiveType.Points;
-            _blendingFactorSrc = BlendingFactor.Zero;
-            _blendingFactorDest = BlendingFactor.Zero;
-            _primitiveSize = 1;
-            _cull = false;
-            _scissor = false;
-            _alpha = false;
-            _blend = false;
-            _alphaFunction = AlphaFunction.Always;
-            _alphaRef = 0;
-            _mode = Mode.Drawing;
+            SelectedPrimitive = PrimitiveType.Points;
+            BlendingFactorSrc = BlendingFactor.Zero;
+            BlendingFactorDest = BlendingFactor.Zero;
+            PrimitiveSize = 1;
+            CullingEnabled = false;
+            ScissorEnabled = false;
+            AlphaTestEnabled = false;
+            BlendingEnabled = false;
+            AlphaFunction = AlphaFunction.Always;
+            AlphaRef = 0;
+            MouseMode = Mode.Drawing;
             _scissorSelectionDrag = false;
-            _polygonModeFront = PolygonMode.Fill;
-            _polygonModeBack = PolygonMode.Fill;
-            _cullFace = CullFaceMode.Front;
+            PolygonModeFront = PolygonMode.Fill;
+            PolygonModeBack = PolygonMode.Fill;
+            CullFace = CullFaceMode.Front;
             _scissorRegion = new Rectangle(0,0,0,0);
             _scissorDragRect = new Rectangle(0,0,0,0);
             _scissorStartPos = new Vector2(0,0);
@@ -72,22 +72,17 @@ namespace ogl2
 
         public void MouseDown(Vector2 point)
         {
-            if (_mode == Mode.Drawing)
+            if (MouseMode == Mode.Drawing)
                 _vertices.Add(point);
-            else if (_mode == Mode.ScissorSelection) {
+            else if (MouseMode == Mode.ScissorSelection) {
                 StartScissorSelection(point);
             }
             Render();
         }
 
-        public void SetMouseMode(Mode mode)
-        {
-            _mode = mode;
-        }
-
         public void MouseMove(Vector2 point)
         {
-            if(_scissorSelectionDrag && _mode == Mode.ScissorSelection)
+            if(_scissorSelectionDrag && MouseMode == Mode.ScissorSelection)
             {
                 _scissorEndPos = point;
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
@@ -106,13 +101,13 @@ namespace ogl2
         public void MouseUp(Vector2 point)
         {
           
-            if (_scissorSelectionDrag && _mode == Mode.ScissorSelection)
+            if (_scissorSelectionDrag && MouseMode == Mode.ScissorSelection)
             {
                 StopScissorSelection(point);
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
                 _scissorRegion = _scissorDragRect;
                 Render();
-                SetMouseMode(Mode.Drawing);
+                MouseMode = Mode.Drawing;
                 _scissorSelectionDrag = false;
             }
         }
@@ -139,66 +134,6 @@ namespace ogl2
         {
             _vertices.Clear();
             Render();
-        }
-
-        public void SetPrimitiveType(PrimitiveType primitiveType)
-        {
-            _selectedPrimitive = primitiveType;
-        }
-
-        public void SetPrimitiveSize(float value)
-        {
-            _primitiveSize = value;
-        }
-    
-        public void EnableCulling(bool enabled)
-        {
-            _cull = enabled;
-        }
-        public void EnableScissor(bool enabled)
-        {
-            _scissor = enabled;
-        }
-
-        public void enableBlending(bool enabled)
-        {
-            _blend = enabled;
-        }
-
-        public void EnableAlpha(bool enabled)
-        {
-            _alpha = enabled;
-        }
-
-        public void SetCullingFace(CullFaceMode cullFaceMode)
-        {
-            _cullFace = cullFaceMode;
-        }
-
-        public void SetBlendingSource(BlendingFactor blendingFactor)
-        {
-            _blendingFactorSrc = blendingFactor;
-        }
-
-        public void SetBlendingDestination(BlendingFactor blendingFactor)
-        {
-            _blendingFactorDest = blendingFactor;
-        }
-
-        public void SetAlphaFunction(AlphaFunction alphaFunction)
-        {
-            _alphaFunction = alphaFunction;
-        }
-
-        public void SetAlphaRef(float alphaRef)
-        {
-            _alphaRef = alphaRef;
-        }
-
-        public void SetPolygonMode(PolygonMode front, PolygonMode back)
-        {
-            _polygonModeFront = front;
-            _polygonModeBack = back;
         }
 
         public void SetViewport(GLControl viewport)
@@ -242,19 +177,19 @@ namespace ogl2
             Clear();
             _viewport.MakeCurrent();
             
-            GL.LineWidth(_primitiveSize);
-            GL.PointSize(_primitiveSize);
+            GL.LineWidth(PrimitiveSize);
+            GL.PointSize(PrimitiveSize);
             GL.Scissor(_scissorRegion.Left, _scissorRegion.Top, _scissorRegion.Width, _scissorRegion.Height);
-            GL.AlphaFunc(_alphaFunction, _alphaRef);
-            GL.BlendFunc(_blendingFactorSrc, _blendingFactorDest);
-            if(_cull) GL.Enable(EnableCap.CullFace);
-            if(_scissor) GL.Enable(EnableCap.ScissorTest);
-            if(_alpha) GL.Enable(EnableCap.AlphaTest);
-            if(_blend) GL.Enable(EnableCap.Blend);
-            GL.CullFace(_cullFace);
-            GL.PolygonMode(MaterialFace.Front, _polygonModeFront);
-            GL.PolygonMode(MaterialFace.Back, _polygonModeBack);
-            GL.Begin(_selectedPrimitive);
+            GL.AlphaFunc(AlphaFunction, AlphaRef);
+            GL.BlendFunc(BlendingFactorSrc, BlendingFactorDest);
+            if(CullingEnabled) GL.Enable(EnableCap.CullFace);
+            if(ScissorEnabled) GL.Enable(EnableCap.ScissorTest);
+            if(AlphaTestEnabled) GL.Enable(EnableCap.AlphaTest);
+            if(BlendingEnabled) GL.Enable(EnableCap.Blend);
+            GL.CullFace(CullFace);
+            GL.PolygonMode(MaterialFace.Front, PolygonModeFront);
+            GL.PolygonMode(MaterialFace.Back, PolygonModeBack);
+            GL.Begin(SelectedPrimitive);
             for (int i = 0; i < _vertices.Count; i++)
             {
                 var color = _colors[i % _colors.Length];
