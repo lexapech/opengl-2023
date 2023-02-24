@@ -15,70 +15,7 @@ namespace ogl2
         {
             Drawing, ScissorSelection
         }
-
-
-        public static Dictionary<string, PrimitiveType> Primitives = new Dictionary<string, PrimitiveType>
-        {
-            {"GL_POINTS",PrimitiveType.Points },
-            {"GL_LINES",PrimitiveType.Lines },
-            {"GL_LINE_STRIP",PrimitiveType.LineStrip },
-            {"GL_LINE_LOOP",PrimitiveType.LineLoop },
-            {"GL_TRIANGLES",PrimitiveType.Triangles },
-            {"GL_TRIANGLE_STRIP",PrimitiveType.TriangleStrip },
-            {"GL_TRIANGLE_FAN",PrimitiveType.TriangleFan },
-            {"GL_QUADS",PrimitiveType.Quads },
-            {"GL_QUAD_STRIP",PrimitiveType.QuadStrip },
-            {"GL_POLYGON",PrimitiveType.Polygon }
-        };
-        public static Dictionary<string, CullFaceMode> CullFaceModes = new Dictionary<string, CullFaceMode>
-        {
-            {"GL_FRONT",CullFaceMode.Front },
-            {"GL_BACK",CullFaceMode.Back },
-            {"GL_FRONT_AND_BACK",CullFaceMode.FrontAndBack }
-        };
-        public static Dictionary<string, PolygonMode> PolygonModes = new Dictionary<string, PolygonMode>
-        {
-            {"GL_FILL",PolygonMode.Fill },
-            {"GL_POINT",PolygonMode.Point },
-            {"GL_LINE",PolygonMode.Line }
-        };
-
-        public static Dictionary<string, AlphaFunction> AlphaModes = new Dictionary<string, AlphaFunction>
-        {
-            {"GL_ALWAYS",AlphaFunction.Always },
-            {"GL_EQUAL",AlphaFunction.Equal},
-            {"GL_GEQUAL",AlphaFunction.Gequal},
-            {"GL_GREATER",AlphaFunction.Greater},
-            {"GL_LEQUAL",AlphaFunction.Lequal},
-            {"GL_LESS",AlphaFunction.Less},
-            {"GL_NEVER",AlphaFunction.Never},
-            {"GL_NOTEQUAL",AlphaFunction.Notequal}
-        };
-
-        public static Dictionary<string, BlendingFactorSrc> BlendingFactorSrcs = new Dictionary<string, BlendingFactorSrc>
-        {
-            {"GL_ZERO", BlendingFactorSrc.Zero},
-            {"GL_ONE", BlendingFactorSrc.One},
-            {"GL_DST_COLOR", BlendingFactorSrc.DstColor},
-            {"GL_ONE_MINUS_DST_COLOR", BlendingFactorSrc.OneMinusDstColor},
-            {"GL_SRC_ALPHA", BlendingFactorSrc.SrcAlpha},
-            {"GL_ONE_MINUS_SRC_ALPHA", BlendingFactorSrc.OneMinusSrcAlpha},
-            {"GL_DST_ALPHA", BlendingFactorSrc.DstAlpha},
-            {"GL_ONE_MINUS_DST_ALPHA", BlendingFactorSrc.OneMinusDstAlpha},
-            {"GL_SRC_ALPHA_SATURATE", BlendingFactorSrc.SrcAlphaSaturate}
-        };
-        public static Dictionary<string, BlendingFactorDest> BlendingFactorDests = new Dictionary<string, BlendingFactorDest>
-        {
-            {"GL_ZERO", BlendingFactorDest.Zero},
-            {"GL_ONE", BlendingFactorDest.One},
-            {"GL_SRC_COLOR",BlendingFactorDest.SrcColor },
-            {"GL_ONE_MINUS_SRC_COLOR",BlendingFactorDest.OneMinusSrcColor },
-            {"GL_SRC_ALPHA", BlendingFactorDest.SrcAlpha},
-            {"GL_ONE_MINUS_SRC_ALPHA", BlendingFactorDest.OneMinusSrcAlpha},
-            {"GL_DST_ALPHA", BlendingFactorDest.DstAlpha},
-            {"GL_ONE_MINUS_DST_ALPHA", BlendingFactorDest.OneMinusDstAlpha}
-        };
-
+    
         private static Color[] _colors = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
         private static float[] _alphas = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f};
         private GLControl _viewport;
@@ -156,7 +93,7 @@ namespace ogl2
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
                 Render(false);
                 DrawSelection();
-                Show();
+                SwapBuffers();
             }         
         }
 
@@ -165,9 +102,10 @@ namespace ogl2
             _scissorRegion = new Rectangle(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);
             Render();
         }
+
         public void MouseUp(Vector2 point)
         {
-            
+          
             if (_scissorSelectionDrag && _mode == Mode.ScissorSelection)
             {
                 StopScissorSelection(point);
@@ -251,6 +189,7 @@ namespace ogl2
         {
             _alphaFunction = alphaFunction;
         }
+
         public void SetAlphaRef(float alphaRef)
         {
             _alphaRef = alphaRef;
@@ -261,6 +200,7 @@ namespace ogl2
             _polygonModeFront = front;
             _polygonModeBack = back;
         }
+
         public void SetViewport(GLControl viewport)
         {
             if(_viewport == null)
@@ -293,7 +233,7 @@ namespace ogl2
             GL.ClearColor(Color4.MidnightBlue);
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
-        public void Show()
+        public void SwapBuffers()
         {
             _viewport.SwapBuffers();
         }
@@ -327,7 +267,7 @@ namespace ogl2
             GL.Disable(EnableCap.ScissorTest);
             GL.Disable(EnableCap.AlphaTest);
             GL.Disable(EnableCap.Blend);
-            if (swapBuffers) Show();
+            if (swapBuffers) SwapBuffers();
         }
     }
 }

@@ -14,6 +14,7 @@ using OpenTK.Platform.Windows;
 
 namespace ogl2
 {
+    using static AttributeMappings;
     public partial class Form1 : Form
     {
         private Renderer _renderer; 
@@ -21,20 +22,26 @@ namespace ogl2
         {
             _renderer = new Renderer();
             InitializeComponent();
-            comboBox1.Items.AddRange(Renderer.Primitives.Keys.ToArray());           
-            cullingCheckBox.Checked = false;
-            cullingComboBox.Items.AddRange(Renderer.CullFaceModes.Keys.ToArray());          
-            polygonMode1.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());       
-            polygonMode2.Items.AddRange(Renderer.PolygonModes.Keys.ToArray());
-            alphaComboBox.Items.AddRange(Renderer.AlphaModes.Keys.ToArray());
-            blendSource.Items.AddRange(Renderer.BlendingFactorSrcs.Keys.ToArray());
-            blendDestination.Items.AddRange(Renderer.BlendingFactorDests.Keys.ToArray());
-            
+            InitComboBoxes();
+
+
+        }
+
+        private void InitComboBoxes()
+        {
+            comboBox1.Items.AddRange(GetComboBoxStrings(Primitives));
+            cullingComboBox.Items.AddRange(GetComboBoxStrings(CullFaceModes));
+            polygonMode1.Items.AddRange(GetComboBoxStrings(PolygonModes));
+            polygonMode2.Items.AddRange(GetComboBoxStrings(PolygonModes));
+            alphaComboBox.Items.AddRange(GetComboBoxStrings(AlphaModes));
+            blendSource.Items.AddRange(GetComboBoxStrings(BlendingFactorSrcs));
+            blendDestination.Items.AddRange(GetComboBoxStrings(BlendingFactorDests));
         }
    
         private void glControl1_Load(object sender, EventArgs e)
         {
-            _renderer.SetViewport(glControl1);           
+            _renderer.SetViewport(glControl1);
+            cullingCheckBox.Checked = false;
             comboBox1.SelectedIndex = 0;
             cullingComboBox.SelectedIndex = 0;
             polygonMode1.SelectedIndex = 0;
@@ -63,9 +70,7 @@ namespace ogl2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PrimitiveType primitiveType;
-            if (comboBox1.SelectedItem == null) return;
-            Renderer.Primitives.TryGetValue((string)comboBox1.SelectedItem, out primitiveType);
+            var primitiveType = AttributeMappings.GetAttribute(comboBox1, AttributeMappings.Primitives);         
             _renderer.SetPrimitiveType(primitiveType);
             _renderer.Render();
         }
@@ -75,10 +80,6 @@ namespace ogl2
             _renderer.ClearPoints();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -94,9 +95,7 @@ namespace ogl2
 
         private void cullingComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CullFaceMode mode;
-            if (cullingComboBox.SelectedItem == null) return;
-            Renderer.CullFaceModes.TryGetValue((string)cullingComboBox.SelectedItem, out mode);
+            var mode = AttributeMappings.GetAttribute(cullingComboBox, AttributeMappings.CullFaceModes);
             _renderer.SetCullingFace(mode);
             _renderer.Render();
         }
@@ -112,12 +111,8 @@ namespace ogl2
         }
         private void UpdatePolygonMode()
         {
-            PolygonMode polygonModeFront;
-            PolygonMode polygonModeBack;
-            if (polygonMode2.SelectedItem == null) return;
-            Renderer.PolygonModes.TryGetValue((string)polygonMode2.SelectedItem, out polygonModeBack);
-            if (polygonMode1.SelectedItem == null) return;
-            Renderer.PolygonModes.TryGetValue((string)polygonMode1.SelectedItem, out polygonModeFront);
+            var polygonModeFront = AttributeMappings.GetAttribute(polygonMode1, AttributeMappings.PolygonModes);
+            var polygonModeBack = AttributeMappings.GetAttribute(polygonMode2, AttributeMappings.PolygonModes); ;
             _renderer.SetPolygonMode(polygonModeFront, polygonModeBack);
             _renderer.Render();
         }
@@ -153,9 +148,7 @@ namespace ogl2
 
         private void alphaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AlphaFunction alphaFunction;
-            if (alphaComboBox.SelectedItem == null) return;
-            Renderer.AlphaModes.TryGetValue((string)alphaComboBox.SelectedItem, out alphaFunction);
+            var alphaFunction = AttributeMappings.GetAttribute(alphaComboBox,AttributeMappings.AlphaModes);          
             _renderer.SetAlphaFunction(alphaFunction);
             _renderer.Render();
         }
@@ -173,25 +166,17 @@ namespace ogl2
             _renderer.Render();
         }
 
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void blendSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BlendingFactorSrc blendingFactor;
-            if (blendSource.SelectedItem == null) return;
-            Renderer.BlendingFactorSrcs.TryGetValue((string)blendSource.SelectedItem, out blendingFactor);
+            var blendingFactor = AttributeMappings.GetAttribute(blendSource, AttributeMappings.BlendingFactorSrcs);         
             _renderer.SetBlendingSource((BlendingFactor)blendingFactor);
             _renderer.Render();   
         }
 
         private void blendDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BlendingFactorSrc blendingFactor;
-            if (blendDestination.SelectedItem == null) return;
-            Renderer.BlendingFactorSrcs.TryGetValue((string)blendDestination.SelectedItem, out blendingFactor);
+            var blendingFactor = AttributeMappings.GetAttribute(blendSource, AttributeMappings.BlendingFactorDests);
             _renderer.SetBlendingDestination((BlendingFactor)blendingFactor);
             _renderer.Render();
         }
