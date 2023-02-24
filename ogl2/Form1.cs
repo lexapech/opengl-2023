@@ -17,10 +17,11 @@ namespace ogl2
     using static AttributeMappings;
     public partial class Form1 : Form
     {
-        private Renderer _renderer; 
+        private Presenter _presenter; 
         public Form1()
         {
-            _renderer = new Renderer();
+            var renderer = new Renderer();
+            _presenter = new Presenter(renderer);
             InitializeComponent();         
         }
 
@@ -45,145 +46,128 @@ namespace ogl2
    
         private void glControl1_Load(object sender, EventArgs e)
         {
-            _renderer.SetViewport(glControl1);
+            _presenter.SetViewport(glControl1);
             InitComboBoxes();
             glControl1_Resize(sender, EventArgs.Empty);
         }
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
-            _renderer.Render();
+            _presenter.Paint();
         }    
 
         private void glControl1_Resize(object sender, EventArgs e)
         {
-            _renderer.SetViewport(glControl1);
-            _renderer.Resize();             
+            _presenter.SetViewport(glControl1);
+            _presenter.Resize();             
         }
 
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _renderer.MouseDown(pos);
+            _presenter.MouseDown(pos);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var primitiveType = GetAttribute(comboBox1, Primitives);         
-            _renderer.SelectedPrimitive = primitiveType;
-            _renderer.Render();
+            var primitiveType = GetAttribute(comboBox1, Primitives);
+            _presenter.SetPrimitiveType(primitiveType);
+
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            _renderer.ClearPoints();
+            _presenter.ClearPoints();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            _renderer.PrimitiveSize = (float)numericUpDown1.Value;
-            _renderer.Render();
+            _presenter.SetPrimitiveSize((float)numericUpDown1.Value);
         }
 
         private void cullingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _renderer.CullingEnabled = cullingCheckBox.Checked;
-            _renderer.Render();
+            _presenter.EnableCulling(cullingCheckBox.Checked);
         }
 
         private void cullingComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var mode = GetAttribute(cullingComboBox, CullFaceModes);
-            _renderer.CullFace = mode;
-            _renderer.Render();
+            _presenter.SetCullFace(mode);
         }
 
         private void polygonMode1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdatePolygonMode();
+            var polygonModeFront = GetAttribute(polygonMode1, PolygonModes);
+            _presenter.SetPolygonModeFront(polygonModeFront);
         }
 
         private void polygonMode2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdatePolygonMode();
-        }
-        private void UpdatePolygonMode()
-        {
-            var polygonModeFront = GetAttribute(polygonMode1, PolygonModes);
             var polygonModeBack = GetAttribute(polygonMode2, PolygonModes);
-            _renderer.PolygonModeFront = polygonModeFront;
-            _renderer.PolygonModeFront = polygonModeBack;
-            _renderer.Render();
+            _presenter.SetPolygonModeBack(polygonModeBack);
         }
 
         private void glControl1_MouseUp(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _renderer.MouseUp(pos);
+            _presenter.MouseUp(pos);
         }
 
         private void glControl1_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _renderer.MouseMove(pos);
+            _presenter.MouseMove(pos);
         }
 
         private void scissorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _renderer.ScissorEnabled = scissorCheckBox.Checked;
-            _renderer.Render();
+            _presenter.EnableScissor(scissorCheckBox.Checked);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _renderer.ClearScissorSelection();
-            _renderer.MouseMode = Renderer.Mode.ScissorSelection;
+            _presenter.BeginScissorSelection();
         }
 
         private void scissorReset_Click(object sender, EventArgs e)
         {
-            _renderer.ClearScissorSelection();
+            _presenter.ClearScissorSelection();
         }
 
         private void alphaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var alphaFunction = GetAttribute(alphaComboBox,AlphaModes);          
-            _renderer.AlphaFunction = alphaFunction;
-            _renderer.Render();
+            var alphaFunction = GetAttribute(alphaComboBox,AlphaModes);
+            _presenter.SetAlphaFunction(alphaFunction);
         }
 
         private void alphaTrackBar_Scroll(object sender, EventArgs e)
         {
             var value = (float)alphaTrackBar.Value / alphaTrackBar.Maximum;
-            _renderer.AlphaRef = value;
-            _renderer.Render();
+            _presenter.SetAlphaRef(value);
         }
 
         private void alphaCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _renderer.AlphaTestEnabled = alphaCheckBox.Checked;
-            _renderer.Render();
+            _presenter.EnableAlphaTest(alphaCheckBox.Checked);
         }
 
 
         private void blendSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var blendingFactor = GetAttribute(blendSource, BlendingFactorSrcs);         
-            _renderer.BlendingFactorSrc = (BlendingFactor)blendingFactor;
-            _renderer.Render();   
+            var blendingFactor = GetAttribute(blendSource, BlendingFactorSrcs);
+            _presenter.SetBlendingFactorSrc((BlendingFactor)blendingFactor); 
         }
 
         private void blendDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
             var blendingFactor = GetAttribute(blendSource, BlendingFactorDests);
-            _renderer.BlendingFactorDest = (BlendingFactor)blendingFactor;
-            _renderer.Render();
+            _presenter.SetBlendingFactorDest((BlendingFactor)blendingFactor);
         }
 
         private void blendCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _renderer.BlendingEnabled = blendCheckBox.Checked;
-            _renderer.Render();
+            _presenter.EnableBlending(blendCheckBox.Checked);
         }
     }
 }
