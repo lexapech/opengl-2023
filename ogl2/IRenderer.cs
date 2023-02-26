@@ -11,7 +11,7 @@ namespace ogl2
     internal interface IRenderer
     {
         void SetViewport(GLControl viewport);
-        void Render(Model model);
+        void Render(RendererState model);
         void SwapBuffers();
         void DrawSelection(Rectangle rect);
         void Clear();

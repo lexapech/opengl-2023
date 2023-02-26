@@ -33,6 +33,7 @@ namespace ogl2
             this.glControl1 = new OpenTK.GLControl();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel7 = new System.Windows.Forms.Panel();
             this.clearButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,26 +51,26 @@ namespace ogl2
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.scissorCheckBox = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.scissorReset = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.alphaCheckBox = new System.Windows.Forms.CheckBox();
+            this.alphaTrackBar = new System.Windows.Forms.TrackBar();
             this.label9 = new System.Windows.Forms.Label();
             this.alphaComboBox = new System.Windows.Forms.ComboBox();
-            this.alphaTrackBar = new System.Windows.Forms.TrackBar();
-            this.alphaCheckBox = new System.Windows.Forms.CheckBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.scissorReset = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.scissorCheckBox = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.blendDestination = new System.Windows.Forms.ComboBox();
+            this.blendSource = new System.Windows.Forms.ComboBox();
             this.blendCheckBox = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.blendSource = new System.Windows.Forms.ComboBox();
-            this.blendDestination = new System.Windows.Forms.ComboBox();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -77,12 +78,11 @@ namespace ogl2
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alphaTrackBar)).BeginInit();
+            this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.panel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -122,6 +122,15 @@ namespace ogl2
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(175, 319);
             this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.comboBox1);
+            this.panel7.Controls.Add(this.clearButton);
+            this.panel7.Location = new System.Drawing.Point(3, 3);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(169, 58);
+            this.panel7.TabIndex = 8;
             // 
             // clearButton
             // 
@@ -299,6 +308,65 @@ namespace ogl2
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Лаб. 2";
             // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.panel5);
+            this.flowLayoutPanel2.Controls.Add(this.panel4);
+            this.flowLayoutPanel2.Controls.Add(this.panel6);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 6);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(175, 388);
+            this.flowLayoutPanel2.TabIndex = 8;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.alphaCheckBox);
+            this.panel5.Controls.Add(this.alphaTrackBar);
+            this.panel5.Controls.Add(this.label9);
+            this.panel5.Controls.Add(this.alphaComboBox);
+            this.panel5.Location = new System.Drawing.Point(3, 3);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(169, 111);
+            this.panel5.TabIndex = 8;
+            // 
+            // alphaCheckBox
+            // 
+            this.alphaCheckBox.AutoSize = true;
+            this.alphaCheckBox.Location = new System.Drawing.Point(6, 18);
+            this.alphaCheckBox.Name = "alphaCheckBox";
+            this.alphaCheckBox.Size = new System.Drawing.Size(75, 17);
+            this.alphaCheckBox.TabIndex = 6;
+            this.alphaCheckBox.Text = "Включить";
+            this.alphaCheckBox.UseVisualStyleBackColor = true;
+            this.alphaCheckBox.CheckedChanged += new System.EventHandler(this.alphaCheckBox_CheckedChanged);
+            // 
+            // alphaTrackBar
+            // 
+            this.alphaTrackBar.Location = new System.Drawing.Point(0, 68);
+            this.alphaTrackBar.Maximum = 100;
+            this.alphaTrackBar.Name = "alphaTrackBar";
+            this.alphaTrackBar.Size = new System.Drawing.Size(166, 45);
+            this.alphaTrackBar.TabIndex = 5;
+            this.alphaTrackBar.Scroll += new System.EventHandler(this.alphaTrackBar_Scroll);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(79, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "Прозрачность";
+            // 
+            // alphaComboBox
+            // 
+            this.alphaComboBox.FormattingEnabled = true;
+            this.alphaComboBox.Location = new System.Drawing.Point(6, 41);
+            this.alphaComboBox.Name = "alphaComboBox";
+            this.alphaComboBox.Size = new System.Drawing.Size(149, 21);
+            this.alphaComboBox.TabIndex = 4;
+            this.alphaComboBox.SelectedIndexChanged += new System.EventHandler(this.alphaComboBox_SelectedIndexChanged);
+            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.scissorReset);
@@ -309,6 +377,26 @@ namespace ogl2
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(169, 108);
             this.panel4.TabIndex = 7;
+            // 
+            // scissorReset
+            // 
+            this.scissorReset.Location = new System.Drawing.Point(6, 68);
+            this.scissorReset.Name = "scissorReset";
+            this.scissorReset.Size = new System.Drawing.Size(160, 23);
+            this.scissorReset.TabIndex = 7;
+            this.scissorReset.Text = "Сбросить выделение";
+            this.scissorReset.UseVisualStyleBackColor = true;
+            this.scissorReset.Click += new System.EventHandler(this.scissorReset_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 39);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(160, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Выбрать область";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // scissorCheckBox
             // 
@@ -330,85 +418,6 @@ namespace ogl2
             this.label6.TabIndex = 4;
             this.label6.Text = "Отсечение";
             // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Controls.Add(this.panel5);
-            this.flowLayoutPanel2.Controls.Add(this.panel4);
-            this.flowLayoutPanel2.Controls.Add(this.panel6);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 6);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(175, 388);
-            this.flowLayoutPanel2.TabIndex = 8;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 39);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(160, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Выбрать область";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // scissorReset
-            // 
-            this.scissorReset.Location = new System.Drawing.Point(6, 68);
-            this.scissorReset.Name = "scissorReset";
-            this.scissorReset.Size = new System.Drawing.Size(160, 23);
-            this.scissorReset.TabIndex = 7;
-            this.scissorReset.Text = "Сбросить выделение";
-            this.scissorReset.UseVisualStyleBackColor = true;
-            this.scissorReset.Click += new System.EventHandler(this.scissorReset_Click);
-            // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.alphaCheckBox);
-            this.panel5.Controls.Add(this.alphaTrackBar);
-            this.panel5.Controls.Add(this.label9);
-            this.panel5.Controls.Add(this.alphaComboBox);
-            this.panel5.Location = new System.Drawing.Point(3, 3);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(169, 111);
-            this.panel5.TabIndex = 8;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Прозрачность";
-            // 
-            // alphaComboBox
-            // 
-            this.alphaComboBox.FormattingEnabled = true;
-            this.alphaComboBox.Location = new System.Drawing.Point(6, 41);
-            this.alphaComboBox.Name = "alphaComboBox";
-            this.alphaComboBox.Size = new System.Drawing.Size(149, 21);
-            this.alphaComboBox.TabIndex = 4;
-            this.alphaComboBox.SelectedIndexChanged += new System.EventHandler(this.alphaComboBox_SelectedIndexChanged);
-            // 
-            // alphaTrackBar
-            // 
-            this.alphaTrackBar.Location = new System.Drawing.Point(0, 68);
-            this.alphaTrackBar.Maximum = 100;
-            this.alphaTrackBar.Name = "alphaTrackBar";
-            this.alphaTrackBar.Size = new System.Drawing.Size(166, 45);
-            this.alphaTrackBar.TabIndex = 5;
-            this.alphaTrackBar.Scroll += new System.EventHandler(this.alphaTrackBar_Scroll);
-            // 
-            // alphaCheckBox
-            // 
-            this.alphaCheckBox.AutoSize = true;
-            this.alphaCheckBox.Location = new System.Drawing.Point(6, 18);
-            this.alphaCheckBox.Name = "alphaCheckBox";
-            this.alphaCheckBox.Size = new System.Drawing.Size(75, 17);
-            this.alphaCheckBox.TabIndex = 6;
-            this.alphaCheckBox.Text = "Включить";
-            this.alphaCheckBox.UseVisualStyleBackColor = true;
-            this.alphaCheckBox.CheckedChanged += new System.EventHandler(this.alphaCheckBox_CheckedChanged);
-            // 
             // panel6
             // 
             this.panel6.Controls.Add(this.label10);
@@ -421,6 +430,42 @@ namespace ogl2
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(169, 123);
             this.panel6.TabIndex = 9;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(0, 83);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(60, 13);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "Destination";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 36);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 13);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "Source";
+            // 
+            // blendDestination
+            // 
+            this.blendDestination.FormattingEnabled = true;
+            this.blendDestination.Location = new System.Drawing.Point(6, 99);
+            this.blendDestination.Name = "blendDestination";
+            this.blendDestination.Size = new System.Drawing.Size(149, 21);
+            this.blendDestination.TabIndex = 7;
+            this.blendDestination.SelectedIndexChanged += new System.EventHandler(this.blendDestination_SelectedIndexChanged);
+            // 
+            // blendSource
+            // 
+            this.blendSource.FormattingEnabled = true;
+            this.blendSource.Location = new System.Drawing.Point(6, 52);
+            this.blendSource.Name = "blendSource";
+            this.blendSource.Size = new System.Drawing.Size(149, 21);
+            this.blendSource.TabIndex = 6;
+            this.blendSource.SelectedIndexChanged += new System.EventHandler(this.blendSource_SelectedIndexChanged);
             // 
             // blendCheckBox
             // 
@@ -442,51 +487,6 @@ namespace ogl2
             this.label7.TabIndex = 4;
             this.label7.Text = "Смешение цветов";
             // 
-            // blendSource
-            // 
-            this.blendSource.FormattingEnabled = true;
-            this.blendSource.Location = new System.Drawing.Point(6, 52);
-            this.blendSource.Name = "blendSource";
-            this.blendSource.Size = new System.Drawing.Size(149, 21);
-            this.blendSource.TabIndex = 6;
-            this.blendSource.SelectedIndexChanged += new System.EventHandler(this.blendSource_SelectedIndexChanged);
-            // 
-            // blendDestination
-            // 
-            this.blendDestination.FormattingEnabled = true;
-            this.blendDestination.Location = new System.Drawing.Point(6, 99);
-            this.blendDestination.Name = "blendDestination";
-            this.blendDestination.Size = new System.Drawing.Size(149, 21);
-            this.blendDestination.TabIndex = 7;
-            this.blendDestination.SelectedIndexChanged += new System.EventHandler(this.blendDestination_SelectedIndexChanged);
-            // 
-            // panel7
-            // 
-            this.panel7.Controls.Add(this.comboBox1);
-            this.panel7.Controls.Add(this.clearButton);
-            this.panel7.Location = new System.Drawing.Point(3, 3);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(169, 58);
-            this.panel7.TabIndex = 8;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 36);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
-            this.label8.TabIndex = 8;
-            this.label8.Text = "Source";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(0, 83);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(60, 13);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Destination";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,8 +496,9 @@ namespace ogl2
             this.Controls.Add(this.glControl1);
             this.Icon = global::ogl2.Properties.Resources.opengl_logo;
             this.Name = "Form1";
-            this.Text = "Печеркин А. С. 0381 Лаб. 1";
+            this.Text = "Печеркин А. С. 0381 Лаб. 1-2";
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.panel7.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -508,15 +509,14 @@ namespace ogl2
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.alphaTrackBar)).EndInit();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            this.panel7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

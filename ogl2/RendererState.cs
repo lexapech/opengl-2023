@@ -11,7 +11,7 @@ using static ogl2.Renderer;
 
 namespace ogl2
 {
-    internal class Model
+    internal class RendererState
     {
         public GLControl Viewport;
         public PrimitiveType SelectedPrimitive;
@@ -32,7 +32,7 @@ namespace ogl2
         public Rectangle ScissorRegion;
        
 
-        public Model()
+        public RendererState()
         {
             SelectedPrimitive = PrimitiveType.Points;
             BlendingFactorSrc = BlendingFactor.Zero;

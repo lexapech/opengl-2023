@@ -55,7 +55,7 @@ namespace ogl2
         {
             _viewport.SwapBuffers();
         }
-        public void Render(Model model)
+        public void Render(RendererState model)
         {
             _viewport.MakeCurrent();
             

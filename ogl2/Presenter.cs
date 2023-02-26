@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using static ogl2.Renderer;
 
 namespace ogl2
 { 
     internal class Presenter
     {
         private IRenderer _renderer;
-        private Model _model;
+        private RendererState _state;
 
         private Rectangle _scissorDragRect;
         public Mode MouseMode;
@@ -25,7 +19,7 @@ namespace ogl2
         public Presenter(IRenderer renderer)
         {
             _renderer = renderer;
-            _model = new Model();
+            _state = new RendererState();
             MouseMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
@@ -40,11 +34,11 @@ namespace ogl2
 
         public void SetViewport(GLControl viewport)
         {
-            if (_model.Viewport == null)
+            if (_state.Viewport == null)
             {
-                _model.Viewport = viewport;
+                _state.Viewport = viewport;
                 _renderer.SetViewport(viewport);
-                _model.ScissorRegion = new Rectangle(0, 0, viewport.ClientSize.Width, viewport.ClientSize.Height);
+                _state.ScissorRegion = new Rectangle(0, 0, viewport.ClientSize.Width, viewport.ClientSize.Height);
             }                   
         }
 
@@ -67,7 +61,7 @@ namespace ogl2
 
         public void ClearPoints()
         {
-            _model.Vertices.Clear();
+            _state.Vertices.Clear();
             Paint();
         }
 
@@ -79,7 +73,7 @@ namespace ogl2
         public void MouseDown(Vector2 point)
         {
             if (MouseMode == Mode.Drawing)
-                _model.Vertices.Add(point);
+                _state.Vertices.Add(point);
             else if (MouseMode == Mode.ScissorSelection)
             {
                 StartScissorSelection(point);
@@ -94,7 +88,7 @@ namespace ogl2
                 _scissorEndPos = point;
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
                 _renderer.Clear();
-                _renderer.Render(_model);
+                _renderer.Render(_state);
                 _renderer.DrawSelection(_scissorDragRect);
                 _renderer.SwapBuffers();
             }
@@ -102,7 +96,7 @@ namespace ogl2
 
         public void ClearScissorSelection()
         {
-            _model.ScissorRegion = new Rectangle(0, 0, _model.Viewport.ClientSize.Width, _model.Viewport.ClientSize.Height);
+            _state.ScissorRegion = new Rectangle(0, 0, _state.Viewport.ClientSize.Width, _state.Viewport.ClientSize.Height);
             Paint();
         }
 
@@ -118,7 +112,7 @@ namespace ogl2
             {
                 StopScissorSelection(point);
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
-                _model.ScissorRegion = _scissorDragRect;
+                _state.ScissorRegion = _scissorDragRect;
                 Paint();
                 MouseMode = Mode.Drawing;
                 _scissorSelectionDrag = false;
@@ -127,83 +121,83 @@ namespace ogl2
 
         public void SetPrimitiveType(PrimitiveType primitiveType)
         {
-            _model.SelectedPrimitive = primitiveType;
+            _state.SelectedPrimitive = primitiveType;
             _renderer.Clear();
-            _renderer.Render(_model);
+            _renderer.Render(_state);
             _renderer.SwapBuffers();
         }
         public void Paint()
         {
             _renderer.Clear();
-            _renderer.Render(_model);
+            _renderer.Render(_state);
             _renderer.SwapBuffers();
         }
         public void SetPrimitiveSize(float primitiveSize)
         {
-            _model.PrimitiveSize = primitiveSize;
+            _state.PrimitiveSize = primitiveSize;
             Paint();
         }
 
         public void SetCullFace(CullFaceMode cullFace)
         {
-            _model.CullFace = cullFace;
+            _state.CullFace = cullFace;
             Paint();
         }
 
         public void SetPolygonModeFront(PolygonMode polygonMode)
         {
-            _model.PolygonModeFront = polygonMode;
+            _state.PolygonModeFront = polygonMode;
             Paint();
         }
         public void SetPolygonModeBack(PolygonMode polygonMode)
         {
-            _model.PolygonModeBack = polygonMode;
+            _state.PolygonModeBack = polygonMode;
             Paint();
         }
 
         public void SetAlphaFunction(AlphaFunction alphaFunction)
         {
-            _model.AlphaFunction = alphaFunction;
+            _state.AlphaFunction = alphaFunction;
             Paint();
         }
 
         public void SetAlphaRef(float alphaRef)
         {
-            _model.AlphaRef = alphaRef;
+            _state.AlphaRef = alphaRef;
             Paint();
         }
 
         
         public void SetBlendingFactorSrc(BlendingFactor blendingFactor)
         {
-            _model.BlendingFactorSrc = blendingFactor;
+            _state.BlendingFactorSrc = blendingFactor;
             Paint();
         }
         public void SetBlendingFactorDest(BlendingFactor blendingFactor)
         {
-            _model.BlendingFactorDest = blendingFactor;
+            _state.BlendingFactorDest = blendingFactor;
             Paint();
         }
         public void EnableCulling(bool enabled)
         {
-            _model.CullingEnabled = enabled;
+            _state.CullingEnabled = enabled;
             Paint();
         }
         public void EnableScissor(bool enabled)
         {
-            _model.ScissorEnabled = enabled;
+            _state.ScissorEnabled = enabled;
             Paint();
         }
 
         public void EnableAlphaTest(bool enabled)
         {
-            _model.AlphaTestEnabled = enabled;
+            _state.AlphaTestEnabled = enabled;
             Paint();
         }
 
         public void EnableBlending(bool enabled)
         {
-            _model.BlendingEnabled = enabled;
+            _state.BlendingEnabled = enabled;
             Paint();
         }
         
