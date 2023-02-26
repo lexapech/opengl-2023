@@ -61,7 +61,8 @@ namespace ogl2
             
             GL.LineWidth(model.PrimitiveSize);
             GL.PointSize(model.PrimitiveSize);
-            GL.Scissor(model.ScissorRegion.Left, model.ScissorRegion.Top, model.ScissorRegion.Width, model.ScissorRegion.Height);
+            GL.Scissor(model.ScissorRegion.Left, model.ScissorRegion.Top,
+                       model.ScissorRegion.Width, model.ScissorRegion.Height);
             GL.AlphaFunc(model.AlphaFunction, model.AlphaRef);
             GL.BlendFunc(model.BlendingFactorSrc, model.BlendingFactorDest);
             if(model.CullingEnabled) GL.Enable(EnableCap.CullFace);
