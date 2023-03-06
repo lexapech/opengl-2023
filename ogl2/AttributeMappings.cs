@@ -76,10 +76,9 @@ namespace ogl2
         };
 
         public static T GetAttribute<T>(ComboBox combo,Dictionary<string, T> mapping)
-        {           
-            T attribute;
+        {
             if (combo.SelectedItem == null) return default;
-            mapping.TryGetValue((string)combo.SelectedItem, out attribute);
+            mapping.TryGetValue((string)combo.SelectedItem, out T attribute);
             return attribute; 
         }
         public static string[] GetComboBoxStrings<T>(Dictionary<string, T> mapping)

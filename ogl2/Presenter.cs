@@ -2,6 +2,7 @@
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 
 namespace ogl2
 { 
@@ -9,9 +10,10 @@ namespace ogl2
     {
         private IRenderer _renderer;
         private RendererState _state;
+        private Fractal _fractal;
 
         private Rectangle _scissorDragRect;
-        public Mode MouseMode;
+        public Mode CurrentMode;
         private Vector2 _scissorStartPos;
         private Vector2 _scissorEndPos;
         private bool _scissorSelectionDrag;
@@ -20,7 +22,8 @@ namespace ogl2
         {
             _renderer = renderer;
             _state = new RendererState();
-            MouseMode = Mode.Drawing;
+            _fractal = new Fractal();
+            CurrentMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
             _scissorStartPos = new Vector2(0, 0);
@@ -29,7 +32,7 @@ namespace ogl2
 
         public enum Mode
         {
-            Drawing, ScissorSelection
+            Drawing, ScissorSelection, Fractal
         }
 
         public void SetViewport(GLControl viewport)
@@ -72,9 +75,9 @@ namespace ogl2
 
         public void MouseDown(Vector2 point)
         {
-            if (MouseMode == Mode.Drawing)
+            if (CurrentMode == Mode.Drawing)
                 _state.Vertices.Add(point);
-            else if (MouseMode == Mode.ScissorSelection)
+            else if (CurrentMode == Mode.ScissorSelection)
             {
                 StartScissorSelection(point);
             }
@@ -83,7 +86,7 @@ namespace ogl2
 
         public void MouseMove(Vector2 point)
         {
-            if (_scissorSelectionDrag && MouseMode == Mode.ScissorSelection)
+            if (_scissorSelectionDrag && CurrentMode == Mode.ScissorSelection)
             {
                 _scissorEndPos = point;
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
@@ -92,6 +95,35 @@ namespace ogl2
                 _renderer.DrawSelection(_scissorDragRect);
                 _renderer.SwapBuffers();
             }
+        }
+
+        public void TabChanged(int index) 
+        {
+            if (index == 2)
+            {
+                CurrentMode = Mode.Fractal;
+                _fractal.Generate();
+                Paint();
+            }
+            else 
+            { 
+                CurrentMode = Mode.Drawing;
+                Paint();
+            }
+        }
+
+        public void SetFractalSteps(int steps)
+        {
+            _fractal.Steps = steps;
+            _fractal.Generate();
+            Paint();
+        }
+
+        public void ChangeFractalSeed()
+        {
+            _fractal.ChangeSeed();
+            _fractal.Generate();
+            Paint();
         }
 
         public void ClearScissorSelection()
@@ -103,18 +135,18 @@ namespace ogl2
         public void BeginScissorSelection()
         {
             ClearScissorSelection();
-            MouseMode = Mode.ScissorSelection;
+            CurrentMode = Mode.ScissorSelection;
         }
 
         public void MouseUp(Vector2 point)
         {
-            if (_scissorSelectionDrag && MouseMode == Mode.ScissorSelection)
+            if (_scissorSelectionDrag && CurrentMode == Mode.ScissorSelection)
             {
                 StopScissorSelection(point);
                 _scissorDragRect = PointsToRect(_scissorStartPos, _scissorEndPos);
                 _state.ScissorRegion = _scissorDragRect;
                 Paint();
-                MouseMode = Mode.Drawing;
+                CurrentMode = Mode.Drawing;
                 _scissorSelectionDrag = false;
             }
         }
@@ -126,10 +158,23 @@ namespace ogl2
             _renderer.Render(_state);
             _renderer.SwapBuffers();
         }
+        public void PaintFractal()
+        {
+            _renderer.Clear();
+            _renderer.Render(_fractal);
+            _renderer.SwapBuffers();
+        }
         public void Paint()
         {
             _renderer.Clear();
-            _renderer.Render(_state);
+            if(CurrentMode == Mode.Fractal)
+            {
+                _renderer.Render(_fractal);
+            }
+            else
+            {
+                _renderer.Render(_state);
+            }
             _renderer.SwapBuffers();
         }
         public void SetPrimitiveSize(float primitiveSize)

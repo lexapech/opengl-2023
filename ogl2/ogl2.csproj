@@ -84,6 +84,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fractal.cs" />
     <Compile Include="IRenderer.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="Program.cs" />

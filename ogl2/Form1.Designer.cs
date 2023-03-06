@@ -69,6 +69,11 @@ namespace ogl2
             this.blendSource = new System.Windows.Forms.ComboBox();
             this.blendCheckBox = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.fractalSteps = new System.Windows.Forms.NumericUpDown();
+            this.ChangeSeedButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -83,6 +88,9 @@ namespace ogl2
             ((System.ComponentModel.ISupportInitialize)(this.alphaTrackBar)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.panel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fractalSteps)).BeginInit();
             this.SuspendLayout();
             // 
             // glControl1
@@ -280,11 +288,13 @@ namespace ogl2
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(609, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(189, 426);
             this.tabControl1.TabIndex = 4;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -487,6 +497,68 @@ namespace ogl2
             this.label7.TabIndex = 4;
             this.label7.Text = "Смешение цветов";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabPage3.Controls.Add(this.panel8);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(181, 400);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Лаб. 3";
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.ChangeSeedButton);
+            this.panel8.Controls.Add(this.label11);
+            this.panel8.Controls.Add(this.fractalSteps);
+            this.panel8.Location = new System.Drawing.Point(6, 3);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(169, 83);
+            this.panel8.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 9);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(100, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Количество шагов";
+            // 
+            // fractalSteps
+            // 
+            this.fractalSteps.Location = new System.Drawing.Point(6, 25);
+            this.fractalSteps.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.fractalSteps.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.fractalSteps.Name = "fractalSteps";
+            this.fractalSteps.Size = new System.Drawing.Size(149, 20);
+            this.fractalSteps.TabIndex = 3;
+            this.fractalSteps.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.fractalSteps.ValueChanged += new System.EventHandler(this.fractalSteps_ValueChanged);
+            // 
+            // ChangeSeedButton
+            // 
+            this.ChangeSeedButton.Location = new System.Drawing.Point(6, 51);
+            this.ChangeSeedButton.Name = "ChangeSeedButton";
+            this.ChangeSeedButton.Size = new System.Drawing.Size(149, 23);
+            this.ChangeSeedButton.TabIndex = 5;
+            this.ChangeSeedButton.Text = "Изменить зерно";
+            this.ChangeSeedButton.UseVisualStyleBackColor = true;
+            this.ChangeSeedButton.Click += new System.EventHandler(this.ChangeSeedButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,7 +568,7 @@ namespace ogl2
             this.Controls.Add(this.glControl1);
             this.Icon = global::ogl2.Properties.Resources.opengl_logo;
             this.Name = "Form1";
-            this.Text = "Печеркин А. С. 0381 Лаб. 1-2";
+            this.Text = "Печеркин А. С. 0381 Лаб. 1-3";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -517,6 +589,10 @@ namespace ogl2
             this.panel4.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fractalSteps)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -562,6 +638,11 @@ namespace ogl2
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown fractalSteps;
+        private System.Windows.Forms.Button ChangeSeedButton;
     }
 }
 

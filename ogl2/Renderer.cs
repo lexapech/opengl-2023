@@ -47,6 +47,7 @@ namespace ogl2
         {
             _viewport.MakeCurrent();
             GL.Viewport(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);
+            GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, _viewport.ClientSize.Width, 0, _viewport.ClientSize.Height, -1, 1);
         }
@@ -55,6 +56,36 @@ namespace ogl2
         {
             _viewport.SwapBuffers();
         }
+
+        public void Render(Fractal fractal)
+        {
+            _viewport.MakeCurrent();           
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+            GL.Translate(_viewport.Width / 2, 0, 0);
+            GL.Scale(_viewport.Height / 400f, _viewport.Height / 400f,1);
+            GL.Begin(PrimitiveType.Triangles);
+            for (int i = 0; i < fractal.Branches.Count; i++)
+            {               
+                GL.Color3(Color.Gray);
+                var ortho = fractal.Branches[i].Direction.PerpendicularRight * fractal.Branches[i].Scale/50f;
+                GL.Vertex2(fractal.Branches[i].Start + ortho);
+                GL.Vertex2(fractal.Branches[i].Start - ortho);
+                GL.Vertex2(fractal.Branches[i].End + ortho);
+             
+                GL.Vertex2(fractal.Branches[i].Start - ortho);
+                GL.Vertex2(fractal.Branches[i].End + ortho);
+                GL.Vertex2(fractal.Branches[i].End - ortho);
+
+                GL.Vertex2(fractal.Branches[i].End + ortho);
+                GL.Vertex2(fractal.Branches[i].End - ortho);
+                GL.Vertex2(fractal.Branches[i].End + fractal.Branches[i].Direction * ortho.Length);
+            }
+            GL.End();
+            GL.PopMatrix();
+        }
+
         public void Render(RendererState model)
         {
             _viewport.MakeCurrent();

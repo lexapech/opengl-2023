@@ -12,6 +12,7 @@ namespace ogl2
     {
         void SetViewport(GLControl viewport);
         void Render(RendererState model);
+        void Render(Fractal fractal);
         void SwapBuffers();
         void DrawSelection(Rectangle rect);
         void Clear();

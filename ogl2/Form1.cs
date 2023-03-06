@@ -17,7 +17,7 @@ namespace ogl2
     using static AttributeMappings;
     public partial class Form1 : Form
     {
-        private Presenter _presenter; 
+        private readonly Presenter _presenter; 
         public Form1()
         {
             var renderer = new Renderer();
@@ -168,6 +168,21 @@ namespace ogl2
         private void blendCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _presenter.EnableBlending(blendCheckBox.Checked);
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _presenter.TabChanged(tabControl1.SelectedIndex);
+        }
+
+        private void fractalSteps_ValueChanged(object sender, EventArgs e)
+        {
+            _presenter.SetFractalSteps((int)fractalSteps.Value);
+        }
+
+        private void ChangeSeedButton_Click(object sender, EventArgs e)
+        {
+            _presenter.ChangeFractalSeed();
         }
     }
 }
