@@ -514,7 +514,7 @@ namespace ogl2
             this.panel8.Controls.Add(this.fractalSteps);
             this.panel8.Location = new System.Drawing.Point(6, 3);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(169, 83);
+            this.panel8.Size = new System.Drawing.Size(169, 86);
             this.panel8.TabIndex = 6;
             // 
             // label11

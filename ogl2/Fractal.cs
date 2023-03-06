@@ -22,6 +22,7 @@ namespace ogl2
                 Scale = scale;
             }
         }
+
         public class Branch
         {
             public Vector2 Start;
@@ -43,13 +44,15 @@ namespace ogl2
             public Branch(State state, float length,int mirror) : this(state.Position, state.Direction, state.Scale, length, mirror) { }
         }
 
+
         public List<Branch> Branches = new List<Branch>();
         public int Steps;
         private State _currentState;
-        private Stack<State> _states = new Stack<State>();
-        private List<Branch> _terminals = new List<Branch>();
+        private readonly Stack<State> _states = new Stack<State>();
+        private readonly List<Branch> _terminals = new List<Branch>();
         private Random _random;
         private int _seed;
+
         public Fractal()
         {
             Steps = 1;
@@ -57,11 +60,13 @@ namespace ogl2
             _seed = seedRandom.Next();
             _random = new Random(_seed);
         }
+
         public void ChangeSeed()
         {
             var seedRandom = new Random();
             _seed = seedRandom.Next();
         }
+
         public void Generate()
         {
             _random = new Random(_seed);
@@ -107,32 +112,38 @@ namespace ogl2
                 _terminals.RemoveRange(0, count);
             }
         }
-        public void AddLine(float length)
+
+        private void AddLine(float length)
         {
             var newBranch = new Branch(_currentState, length,1);
             Branches.Add(newBranch);
             _currentState.Position = newBranch.End;
         }
-        public void AddLeaf(float length,int mirror)
+
+        private void AddLeaf(float length,int mirror)
         {
             var newBranch = new Branch(_currentState, length, mirror);
             Branches.Add(newBranch);
             _terminals.Add(newBranch);
             _currentState.Position = newBranch.End;
         }
-        public void Rotate(float angle)
+
+        private void Rotate(float angle)
         {
             _currentState.Direction = Vector2.Transform(_currentState.Direction,Quaternion.FromEulerAngles(0,0, -angle/180*(float)Math.PI));
         }
-        public void Scale(float factor)
+
+        private void Scale(float factor)
         {
             _currentState.Scale *= factor;
         }
-        public void PushState()
+
+        private void PushState()
         {
             _states.Push(_currentState);
         }
-        public void PopState()
+
+        private void PopState()
         {
             _currentState = _states.Pop();
         }

@@ -10,8 +10,8 @@ namespace ogl2
     internal class Renderer : IRenderer
     {
        
-        private static Color[] _colors = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
-        private static float[] _alphas = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f};
+        private static readonly Color[] _colors = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
+        private static readonly float[] _alphas = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f};
         private GLControl _viewport;
           
         public void DrawSelection(Rectangle rect)
