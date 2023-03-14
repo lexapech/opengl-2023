@@ -22,6 +22,8 @@ namespace ogl2
         {
             var renderer = new Renderer();
             _presenter = new Presenter(renderer);
+            _presenter.CursorChangeHandler += SetCursor;
+            
             InitializeComponent();         
         }
 
@@ -183,6 +185,32 @@ namespace ogl2
         private void ChangeSeedButton_Click(object sender, EventArgs e)
         {
             _presenter.ChangeFractalSeed();
+        }
+
+        private void curveScale_Scroll(object sender, EventArgs e)
+        {
+            var value = (float)curveScale.Value / curveScale.Maximum;
+            _presenter.SetSplineScale(value);
+        }
+
+        private void curveSteps_ValueChanged(object sender, EventArgs e)
+        {
+            _presenter.SetSplineSteps((int)curveSteps.Value);
+        }
+
+        private void SetCursor(bool hand)
+        {
+            glControl1.Cursor = hand ? Cursors.Hand : Cursors.Default;
+        }
+
+        private void cardinalCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.EnableCardinalSpline(cardinalCheckBox.Checked);
+        }
+
+        private void BezierCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.EnableBezierSpline(BezierCheckBox.Checked);
         }
     }
 }

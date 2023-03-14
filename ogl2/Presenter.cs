@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
@@ -11,18 +13,21 @@ namespace ogl2
         private IRenderer _renderer;
         private RendererState _state;
         private Fractal _fractal;
+        private Spline _spline;
 
         private Rectangle _scissorDragRect;
         public Mode CurrentMode;
         private Vector2 _scissorStartPos;
         private Vector2 _scissorEndPos;
         private bool _scissorSelectionDrag;
+        public Action<bool> CursorChangeHandler;
 
         public Presenter(IRenderer renderer)
         {
             _renderer = renderer;
             _state = new RendererState();
             _fractal = new Fractal();
+            _spline = new Spline();
             CurrentMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
@@ -30,9 +35,10 @@ namespace ogl2
             _scissorEndPos = new Vector2(0, 0);
         }
 
+
         public enum Mode
         {
-            Drawing, ScissorSelection, Fractal
+            Drawing, ScissorSelection, Fractal,Spline
         }
 
         public void SetViewport(GLControl viewport)
@@ -77,6 +83,14 @@ namespace ogl2
         {
             if (CurrentMode == Mode.Drawing)
                 _state.Vertices.Add(ConvertMousePos(point));
+            else if (CurrentMode == Mode.Spline)
+            {
+                    var pointIndex = _spline.NearControlPoint(ConvertMousePos(point));
+                    if(pointIndex != -1)
+                    {
+                        _spline.GrabControlPoint(pointIndex);
+                    }
+            }
             else if (CurrentMode == Mode.ScissorSelection)
             {
                 StartScissorSelection(point);
@@ -101,6 +115,21 @@ namespace ogl2
                 _renderer.DrawSelection(_scissorDragRect);
                 _renderer.SwapBuffers();
             }
+            else if(CurrentMode == Mode.Spline)
+            {
+                if (CursorChangeHandler != null)
+                {
+                    if (_spline.NearControlPoint(ConvertMousePos(point)) != -1)
+                        CursorChangeHandler.Invoke(true);
+                    else
+                        CursorChangeHandler.Invoke(false);
+                }
+                if(_spline.MoveGrabbedControlPoint(ConvertMousePos(point)))
+                {
+                    _spline.Generate();
+                    Paint();
+                }                       
+            }
         }
 
         public void TabChanged(int index) 
@@ -111,10 +140,20 @@ namespace ogl2
                 _fractal.Generate();
                 Paint();
             }
+            else if(index == 3)
+            {
+                CurrentMode = Mode.Spline;
+                _spline.Generate();
+                Paint();
+            }
             else 
             { 
                 CurrentMode = Mode.Drawing;
                 Paint();
+            }
+            if (CursorChangeHandler != null)
+            {
+                CursorChangeHandler.Invoke(false);
             }
         }
 
@@ -155,6 +194,10 @@ namespace ogl2
                 CurrentMode = Mode.Drawing;
                 _scissorSelectionDrag = false;
             }
+            else if (CurrentMode == Mode.Spline)
+            {
+                _spline.ReleaseControlPoint();
+            }
         }
 
         public void SetPrimitiveType(PrimitiveType primitiveType)
@@ -176,6 +219,10 @@ namespace ogl2
             if(CurrentMode == Mode.Fractal)
             {
                 _renderer.Render(_fractal);
+            }
+            else if(CurrentMode == Mode.Spline)
+            {
+                _renderer.Render(_spline);
             }
             else
             {
@@ -252,5 +299,30 @@ namespace ogl2
             Paint();
         }
         
+        public void SetSplineSteps(int steps)
+        {
+            _spline.Steps = steps;
+            _spline.Generate();
+            Paint();
+        }
+
+        public void SetSplineScale(float scale)
+        {
+            _spline.Scale = scale;
+            _spline.Generate();
+            Paint();
+        }
+
+        public void EnableBezierSpline(bool enabled)
+        {
+            _spline.RenderBezier = enabled;
+            Paint();
+        }
+
+        public void EnableCardinalSpline(bool enabled)
+        {
+            _spline.RenderCardinal = enabled;
+            Paint();
+        }
     }
 }

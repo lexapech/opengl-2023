@@ -71,9 +71,20 @@ namespace ogl2
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.ChangeSeedButton = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.fractalSteps = new System.Windows.Forms.NumericUpDown();
-            this.ChangeSeedButton = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel11 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.curveSteps = new System.Windows.Forms.NumericUpDown();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.curveScale = new System.Windows.Forms.TrackBar();
+            this.label12 = new System.Windows.Forms.Label();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.BezierCheckBox = new System.Windows.Forms.CheckBox();
+            this.cardinalCheckBox = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -91,6 +102,13 @@ namespace ogl2
             this.tabPage3.SuspendLayout();
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fractalSteps)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
+            this.panel11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curveSteps)).BeginInit();
+            this.panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curveScale)).BeginInit();
+            this.panel10.SuspendLayout();
             this.SuspendLayout();
             // 
             // glControl1
@@ -289,6 +307,7 @@ namespace ogl2
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(609, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -517,6 +536,16 @@ namespace ogl2
             this.panel8.Size = new System.Drawing.Size(169, 86);
             this.panel8.TabIndex = 6;
             // 
+            // ChangeSeedButton
+            // 
+            this.ChangeSeedButton.Location = new System.Drawing.Point(6, 51);
+            this.ChangeSeedButton.Name = "ChangeSeedButton";
+            this.ChangeSeedButton.Size = new System.Drawing.Size(149, 23);
+            this.ChangeSeedButton.TabIndex = 5;
+            this.ChangeSeedButton.Text = "Изменить зерно";
+            this.ChangeSeedButton.UseVisualStyleBackColor = true;
+            this.ChangeSeedButton.Click += new System.EventHandler(this.ChangeSeedButton_Click);
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -549,15 +578,121 @@ namespace ogl2
             0});
             this.fractalSteps.ValueChanged += new System.EventHandler(this.fractalSteps_ValueChanged);
             // 
-            // ChangeSeedButton
+            // tabPage4
             // 
-            this.ChangeSeedButton.Location = new System.Drawing.Point(6, 51);
-            this.ChangeSeedButton.Name = "ChangeSeedButton";
-            this.ChangeSeedButton.Size = new System.Drawing.Size(149, 23);
-            this.ChangeSeedButton.TabIndex = 5;
-            this.ChangeSeedButton.Text = "Изменить зерно";
-            this.ChangeSeedButton.UseVisualStyleBackColor = true;
-            this.ChangeSeedButton.Click += new System.EventHandler(this.ChangeSeedButton_Click);
+            this.tabPage4.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabPage4.Controls.Add(this.flowLayoutPanel3);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(181, 400);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Лаб. 4";
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.Controls.Add(this.panel11);
+            this.flowLayoutPanel3.Controls.Add(this.panel9);
+            this.flowLayoutPanel3.Controls.Add(this.panel10);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(175, 388);
+            this.flowLayoutPanel3.TabIndex = 9;
+            // 
+            // panel11
+            // 
+            this.panel11.Controls.Add(this.label14);
+            this.panel11.Controls.Add(this.curveSteps);
+            this.panel11.Location = new System.Drawing.Point(3, 3);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(169, 56);
+            this.panel11.TabIndex = 10;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(3, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(72, 13);
+            this.label14.TabIndex = 4;
+            this.label14.Text = "Шаги кривой";
+            // 
+            // curveSteps
+            // 
+            this.curveSteps.Location = new System.Drawing.Point(6, 25);
+            this.curveSteps.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.curveSteps.Name = "curveSteps";
+            this.curveSteps.Size = new System.Drawing.Size(149, 20);
+            this.curveSteps.TabIndex = 3;
+            this.curveSteps.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.curveSteps.ValueChanged += new System.EventHandler(this.curveSteps_ValueChanged);
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.curveScale);
+            this.panel9.Controls.Add(this.label12);
+            this.panel9.Location = new System.Drawing.Point(3, 65);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(169, 61);
+            this.panel9.TabIndex = 8;
+            // 
+            // curveScale
+            // 
+            this.curveScale.Location = new System.Drawing.Point(3, 16);
+            this.curveScale.Maximum = 100;
+            this.curveScale.Name = "curveScale";
+            this.curveScale.Size = new System.Drawing.Size(166, 45);
+            this.curveScale.TabIndex = 5;
+            this.curveScale.Scroll += new System.EventHandler(this.curveScale_Scroll);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(64, 13);
+            this.label12.TabIndex = 4;
+            this.label12.Text = "Натяжение";
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.BezierCheckBox);
+            this.panel10.Controls.Add(this.cardinalCheckBox);
+            this.panel10.Location = new System.Drawing.Point(3, 132);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(169, 64);
+            this.panel10.TabIndex = 9;
+            // 
+            // BezierCheckBox
+            // 
+            this.BezierCheckBox.AutoSize = true;
+            this.BezierCheckBox.Location = new System.Drawing.Point(6, 36);
+            this.BezierCheckBox.Name = "BezierCheckBox";
+            this.BezierCheckBox.Size = new System.Drawing.Size(152, 17);
+            this.BezierCheckBox.TabIndex = 1;
+            this.BezierCheckBox.Text = "С стандартной функцией";
+            this.BezierCheckBox.UseVisualStyleBackColor = true;
+            this.BezierCheckBox.CheckedChanged += new System.EventHandler(this.BezierCheckBox_CheckedChanged);
+            // 
+            // cardinalCheckBox
+            // 
+            this.cardinalCheckBox.AutoSize = true;
+            this.cardinalCheckBox.Checked = true;
+            this.cardinalCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cardinalCheckBox.Location = new System.Drawing.Point(6, 13);
+            this.cardinalCheckBox.Name = "cardinalCheckBox";
+            this.cardinalCheckBox.Size = new System.Drawing.Size(158, 17);
+            this.cardinalCheckBox.TabIndex = 0;
+            this.cardinalCheckBox.Text = "Без стандартной функции";
+            this.cardinalCheckBox.UseVisualStyleBackColor = true;
+            this.cardinalCheckBox.CheckedChanged += new System.EventHandler(this.cardinalCheckBox_CheckedChanged);
             // 
             // Form1
             // 
@@ -593,6 +728,16 @@ namespace ogl2
             this.panel8.ResumeLayout(false);
             this.panel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fractalSteps)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.panel11.ResumeLayout(false);
+            this.panel11.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curveSteps)).EndInit();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.curveScale)).EndInit();
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -643,6 +788,17 @@ namespace ogl2
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown fractalSteps;
         private System.Windows.Forms.Button ChangeSeedButton;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.TrackBar curveScale;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.Panel panel11;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.NumericUpDown curveSteps;
+        private System.Windows.Forms.CheckBox BezierCheckBox;
+        private System.Windows.Forms.CheckBox cardinalCheckBox;
     }
 }
 
