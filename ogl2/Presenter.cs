@@ -76,12 +76,18 @@ namespace ogl2
         public void MouseDown(Vector2 point)
         {
             if (CurrentMode == Mode.Drawing)
-                _state.Vertices.Add(point);
+                _state.Vertices.Add(ConvertMousePos(point));
             else if (CurrentMode == Mode.ScissorSelection)
             {
                 StartScissorSelection(point);
             }
             Paint();
+        }
+
+        private Vector2 ConvertMousePos(Vector2 pos)
+        {
+            var normalized = new Vector2(pos.X / _renderer.GetSize().Width, pos.Y / _renderer.GetSize().Height);
+            return normalized * 2 - Vector2.One;
         }
 
         public void MouseMove(Vector2 point)

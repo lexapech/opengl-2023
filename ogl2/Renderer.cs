@@ -17,6 +17,11 @@ namespace ogl2
         public void DrawSelection(Rectangle rect)
         {
             _viewport.MakeCurrent();
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            GL.LoadIdentity();
+            GL.Translate(-1, -1, 0);
+            GL.Scale(2.0 / _viewport.Width, 2.0 / _viewport.Height,1);         
             GL.Disable(EnableCap.CullFace);
             GL.LineWidth(1f);
             GL.PolygonMode(MaterialFace.Back, PolygonMode.Line);
@@ -29,6 +34,7 @@ namespace ogl2
             
             
             GL.End();
+            GL.PopMatrix();
         }
 
         public void SetViewport(GLControl viewport)
@@ -47,9 +53,14 @@ namespace ogl2
         {
             _viewport.MakeCurrent();
             GL.Viewport(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);
-            GL.MatrixMode(MatrixMode.Projection);
+           /* GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0, _viewport.ClientSize.Width, 0, _viewport.ClientSize.Height, -1, 1);
+            GL.Ortho(0, _viewport.ClientSize.Width, 0, _viewport.ClientSize.Height, -1, 1);*/
+        }
+
+        public Size GetSize()
+        {
+            return _viewport.Size;
         }
 
         public void SwapBuffers()
@@ -63,8 +74,8 @@ namespace ogl2
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             GL.LoadIdentity();
-            GL.Translate(_viewport.Width / 2, 0, 0);
-            GL.Scale(_viewport.Height / 400f, _viewport.Height / 400f,1);
+            GL.Translate(0, -1, 0);
+            GL.Scale(1 / 200f / _viewport.Width*_viewport.Height, 1 / 200f,1);
             GL.Begin(PrimitiveType.Triangles);
             for (int i = 0; i < fractal.Branches.Count; i++)
             {               

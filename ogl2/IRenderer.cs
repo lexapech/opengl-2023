@@ -17,6 +17,7 @@ namespace ogl2
         void DrawSelection(Rectangle rect);
         void Clear();
 
+        Size GetSize();
         void Resize();
     }
 }
