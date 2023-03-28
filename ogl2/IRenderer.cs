@@ -14,6 +14,9 @@ namespace ogl2
         void Render(RendererState model);
         void Render(Fractal fractal);
         void Render(Spline spline);
+        void Render(Surface surface);
+
+        void LoadShaders(string vertex,string fragment);
         void SwapBuffers();
         void DrawSelection(Rectangle rect);
         void Clear();

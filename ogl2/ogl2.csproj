@@ -92,6 +92,7 @@
     <Compile Include="Renderer.cs" />
     <Compile Include="RendererState.cs" />
     <Compile Include="Spline.cs" />
+    <Compile Include="Surface.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

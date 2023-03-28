@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System.IO;
 
 namespace ogl2
 { 
@@ -14,6 +15,7 @@ namespace ogl2
         private RendererState _state;
         private Fractal _fractal;
         private Spline _spline;
+        private Surface _surface;
 
         private Rectangle _scissorDragRect;
         public Mode CurrentMode;
@@ -24,10 +26,11 @@ namespace ogl2
 
         public Presenter(IRenderer renderer)
         {
-            _renderer = renderer;
+            _renderer = renderer;         
             _state = new RendererState();
             _fractal = new Fractal();
             _spline = new Spline();
+            _surface = new Surface(_spline);
             CurrentMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
@@ -35,10 +38,16 @@ namespace ogl2
             _scissorEndPos = new Vector2(0, 0);
         }
 
+        private void LoadShaders(string vertex,string fragment)
+        {
+            var shader1 = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, vertex));
+            var shader2 = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, fragment));
+            _renderer.LoadShaders(shader1,shader2);
+        }
 
         public enum Mode
         {
-            Drawing, ScissorSelection, Fractal,Spline
+            Drawing, ScissorSelection, Fractal,Spline,Surface
         }
 
         public void SetViewport(GLControl viewport)
@@ -47,6 +56,7 @@ namespace ogl2
             {
                 _state.Viewport = viewport;
                 _renderer.SetViewport(viewport);
+                LoadShaders("vertex.glsl","fragment.glsl");
                 _state.ScissorRegion = new Rectangle(0, 0, viewport.ClientSize.Width, viewport.ClientSize.Height);
             }                   
         }
@@ -146,6 +156,12 @@ namespace ogl2
                 _spline.Generate();
                 Paint();
             }
+            else if (index == 4)
+            {
+                CurrentMode = Mode.Surface;
+                _surface.Generate();
+                Paint();
+            }
             else 
             { 
                 CurrentMode = Mode.Drawing;
@@ -223,6 +239,10 @@ namespace ogl2
             else if(CurrentMode == Mode.Spline)
             {
                 _renderer.Render(_spline);
+            }
+            else if (CurrentMode == Mode.Surface)
+            {
+                _renderer.Render(_surface);
             }
             else
             {
@@ -322,6 +342,12 @@ namespace ogl2
         public void EnableCardinalSpline(bool enabled)
         {
             _spline.RenderCardinal = enabled;
+            Paint();
+        }
+
+        public void SetSurfaceLightPosition(Vector3 pos)
+        {
+            _surface.Point = pos;
             Paint();
         }
     }

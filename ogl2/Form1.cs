@@ -21,7 +21,7 @@ namespace ogl2
         public Form1()
         {
             var renderer = new Renderer();
-            _presenter = new Presenter(renderer);
+            _presenter = new Presenter(renderer);         
             _presenter.CursorChangeHandler += SetCursor;
             
             InitializeComponent();         
@@ -211,6 +211,43 @@ namespace ogl2
         private void BezierCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _presenter.EnableBezierSpline(BezierCheckBox.Checked);
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
+                trackBar2.Value / (float)trackBar2.Maximum,
+                trackBar3.Value / (float)trackBar3.Maximum);
+            _presenter.SetSurfaceLightPosition(pos);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
+                trackBar2.Value / (float)trackBar2.Maximum,
+                trackBar3.Value / (float)trackBar3.Maximum);
+            _presenter.SetSurfaceLightPosition(pos);
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
+                trackBar2.Value / (float)trackBar2.Maximum,
+                trackBar3.Value / (float)trackBar3.Maximum);
+            _presenter.SetSurfaceLightPosition(pos);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
+                trackBar2.Value / (float)trackBar2.Maximum,
+                trackBar3.Value / (float)trackBar3.Maximum);
+            _presenter.SetSurfaceLightPosition(pos);
         }
     }
 }
