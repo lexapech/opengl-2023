@@ -22,6 +22,8 @@ namespace ogl2
         private int _resolution;
         private Spline _spline;
         public Vector3 Point;
+        public Vector2 CameraAngle;
+        public float CameraDistance;
        
         
 

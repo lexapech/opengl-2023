@@ -112,7 +112,7 @@ namespace ogl2
                 _terminals.RemoveRange(0, count);
             }
         }
-
+     
         private void AddLine(float length)
         {
             var newBranch = new Branch(_currentState, length,1);

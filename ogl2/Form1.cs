@@ -119,7 +119,7 @@ namespace ogl2
         private void glControl1_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _presenter.MouseMove(pos);
+            _presenter.MouseMove(pos,(e.Button & MouseButtons.Left) != 0, (e.Button & MouseButtons.Right) != 0);
         }
 
         private void scissorCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -248,6 +248,19 @@ namespace ogl2
                 trackBar2.Value / (float)trackBar2.Maximum,
                 trackBar3.Value / (float)trackBar3.Maximum);
             _presenter.SetSurfaceLightPosition(pos);
+
+            glControl1.MouseWheel += new MouseEventHandler(glControl1_MouseWheel);
+        }
+
+        private void glControl1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            var delta = e.Delta;
+            _presenter.Zoom(delta);
+        }
+
+        private void glControl1_Scroll(object sender, ScrollEventArgs e)
+        {
+
         }
     }
 }

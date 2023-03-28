@@ -23,6 +23,7 @@ namespace ogl2
         private Vector2 _scissorEndPos;
         private bool _scissorSelectionDrag;
         public Action<bool> CursorChangeHandler;
+        private Vector2 _previousMousePosition;
 
         public Presenter(IRenderer renderer)
         {
@@ -31,6 +32,8 @@ namespace ogl2
             _fractal = new Fractal();
             _spline = new Spline();
             _surface = new Surface(_spline);
+            _surface.CameraAngle = new Vector2((float)(-45/180f*Math.PI), (float)(45 / 180f * Math.PI));
+            _surface.CameraDistance = 2;
             CurrentMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
@@ -95,18 +98,32 @@ namespace ogl2
                 _state.Vertices.Add(ConvertMousePos(point));
             else if (CurrentMode == Mode.Spline)
             {
-                    var pointIndex = _spline.NearControlPoint(ConvertMousePos(point));
-                    if(pointIndex != -1)
-                    {
-                        _spline.GrabControlPoint(pointIndex);
-                    }
+                var pointIndex = _spline.NearControlPoint(ConvertMousePos(point));
+                if (pointIndex != -1)
+                {
+                    _spline.GrabControlPoint(pointIndex);
+                }
             }
             else if (CurrentMode == Mode.ScissorSelection)
             {
                 StartScissorSelection(point);
             }
+            else if (CurrentMode == Mode.Surface)
+            {
+                _previousMousePosition = point;
+            }
             Paint();
         }
+
+        private void RotateCamera(Vector2 delta)
+        {
+            _surface.CameraAngle += delta*0.01f;
+            if (_surface.CameraAngle.X > 2 * Math.PI) _surface.CameraAngle.X -= (float)(2 * Math.PI);
+            if (_surface.CameraAngle.X < 0) _surface.CameraAngle.X += (float)(2 * Math.PI);
+            if (_surface.CameraAngle.Y > Math.PI/2 * 0.9f) _surface.CameraAngle.Y = (float)(Math.PI/2*0.9f);
+            if (_surface.CameraAngle.Y < -Math.PI/2 * 0.9f) _surface.CameraAngle.Y = (float)(-Math.PI/2 * 0.9f);
+        }
+
 
         private Vector2 ConvertMousePos(Vector2 pos)
         {
@@ -114,7 +131,7 @@ namespace ogl2
             return normalized * 2 - Vector2.One;
         }
 
-        public void MouseMove(Vector2 point)
+        public void MouseMove(Vector2 point,bool leftButton, bool rightButton)
         {
             if (_scissorSelectionDrag && CurrentMode == Mode.ScissorSelection)
             {
@@ -139,6 +156,16 @@ namespace ogl2
                     _spline.Generate();
                     Paint();
                 }                       
+            }
+            else if(CurrentMode == Mode.Surface)
+            {
+                if(rightButton)
+                {
+                    var delta = point - _previousMousePosition;
+                    _previousMousePosition = point;
+                    RotateCamera(delta);
+                    Paint();
+                }
             }
         }
 
@@ -348,6 +375,14 @@ namespace ogl2
         public void SetSurfaceLightPosition(Vector3 pos)
         {
             _surface.Point = pos;
+            Paint();
+        }
+
+        public void Zoom(int delta)
+        {
+            _surface.CameraDistance -= delta * 0.005f;
+            if (_surface.CameraDistance > 8) _surface.CameraDistance = 8;
+            if (_surface.CameraDistance < 0.2f) _surface.CameraDistance = 0.2f;
             Paint();
         }
     }
