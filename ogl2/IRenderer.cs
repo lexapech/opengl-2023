@@ -16,6 +16,8 @@ namespace ogl2
         void Render(Spline spline);
         void Render(Surface surface);
 
+        void Render(Scene scene);
+
         void LoadShaders(string vertex,string fragment);
         void SwapBuffers();
         void DrawSelection(Rectangle rect);

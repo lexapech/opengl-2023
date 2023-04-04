@@ -119,7 +119,7 @@ namespace ogl2
         private void glControl1_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _presenter.MouseMove(pos,(e.Button & MouseButtons.Left) != 0, (e.Button & MouseButtons.Right) != 0);
+            _presenter.MouseMove(pos,(e.Button & MouseButtons.Left) != 0, (e.Button & MouseButtons.Right) != 0, (ModifierKeys & Keys.Shift) != 0);
         }
 
         private void scissorCheckBox_CheckedChanged(object sender, EventArgs e)

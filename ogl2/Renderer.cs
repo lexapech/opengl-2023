@@ -9,15 +9,14 @@ using static ogl2.Surface;
 namespace ogl2
 {
     internal class Renderer : IRenderer
-    {
-       
+    {    
         private static readonly Color[] _colors = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
         private static readonly float[] _alphas = {1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f};
         private GLControl _viewport;
         private int _vao;
         private int _vbo;
         private int _ebo;
-        private SurfaceMesh _mesh;
+        private Mesh _mesh;
         private int _program = 0;
         public void DrawSelection(Rectangle rect)
         {
@@ -45,6 +44,11 @@ namespace ogl2
         public void SetViewport(GLControl viewport)
         {
             _viewport = viewport;
+            _viewport.MakeCurrent();
+             GL.EnableClientState(ArrayCap.VertexArray);
+            _vao = GL.GenVertexArray();
+            _vbo = GL.GenBuffer();
+            _ebo = GL.GenBuffer();
         }
 
         public void Clear()
@@ -52,12 +56,14 @@ namespace ogl2
             _viewport.MakeCurrent();
             GL.ClearColor(Color4.MidnightBlue);
             GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.DepthBufferBit);
         }
 
         public void Resize()
         {
             _viewport.MakeCurrent();
             GL.Viewport(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);
+           
            /* GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, _viewport.ClientSize.Width, 0, _viewport.ClientSize.Height, -1, 1);*/
@@ -198,7 +204,7 @@ namespace ogl2
                RenderBezierCurve(spline);
         }
 
-        private void UpdateMesh(SurfaceMesh mesh)
+        private void UpdateMesh(Mesh mesh)
         {     
             _mesh = mesh;
             GL.BindVertexArray(_vao);
@@ -217,13 +223,13 @@ namespace ogl2
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
-        private void InitMesh(SurfaceMesh mesh)
+        private void InitMesh(Mesh mesh)
         {
-            GL.EnableClientState(ArrayCap.VertexArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
             _mesh = mesh;
-            _vao = GL.GenVertexArray();
-            _vbo = GL.GenBuffer();
-            _ebo = GL.GenBuffer();
+            //_vao = GL.GenVertexArray();
+            //_vbo = GL.GenBuffer();
+            //_ebo = GL.GenBuffer();
         }
 
         public void LoadShaders(string vertex,string fragment)
@@ -251,7 +257,7 @@ namespace ogl2
                 InitMesh(surface.Mesh);
             }
             UpdateMesh(surface.Mesh);
-            
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
             var perspectiveMatrix = Matrix4.CreatePerspectiveFieldOfView(
@@ -293,7 +299,6 @@ namespace ogl2
             GL.PopMatrix();
            
             GL.Disable(EnableCap.Blend);
-
         }
 
         private void DrawLight(Vector3 pos,Matrix4 mat)
@@ -305,8 +310,7 @@ namespace ogl2
             GL.MultMatrix(ref mat1);
            
             GL.Scale(0.05f, 0.05f,0.05f);
-            
-            Console.WriteLine(pos);          
+               
             GL.Begin(PrimitiveType.TriangleFan);
             GL.Color3(1f, 1f, 0);
             GL.Vertex3(0,0,0);
@@ -321,13 +325,92 @@ namespace ogl2
             float r2 = 2f;
             for (int i = 0; i <= 16; i++)
             {
-                GL.Vertex3(r1*Math.Cos(i / 16f * 2 * Math.PI), r1 * Math.Sin(i / 16f * 2 * Math.PI), 0);
-                GL.Vertex3(r2*Math.Cos(i / 16f * 2 * Math.PI), r2*Math.Sin(i / 16f * 2 * Math.PI), 0);
+                GL.Vertex3(r1 * Math.Cos(i / 16f * 2 * Math.PI), r1 * Math.Sin(i / 16f * 2 * Math.PI), 0);
+                GL.Vertex3(r2 * Math.Cos(i / 16f * 2 * Math.PI), r2 * Math.Sin(i / 16f * 2 * Math.PI), 0);
             }
             GL.End();
             GL.PopMatrix();
         }
 
+        public void Render(Scene scene)
+        {
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PushMatrix();
+            GL.Enable(EnableCap.DepthTest);
+            var perspectiveMatrix = Matrix4.CreatePerspectiveFieldOfView(
+                MathHelper.DegreesToRadians(30.0f),
+                _viewport.AspectRatio,
+                0.1f,
+                100.0f);
+            GL.LoadMatrix(ref perspectiveMatrix);
 
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            
+            var modelView = Matrix4.LookAt(scene.CameraDirection * scene.CameraDistance + scene.CameraFocus, scene.CameraFocus, Vector3.UnitY);
+            //modelView = Matrix4.CreateTranslation(0, 0, -surface.Size/2)*modelView;
+            GL.LoadMatrix(ref modelView);
+            
+            if (scene.ShowAxis)
+            {
+                GL.PushMatrix();
+                DrawArrow(Color.Blue,2);
+                GL.Rotate(90, Vector3.UnitY);
+                DrawArrow(Color.Red,2);
+                GL.Rotate(-90, Vector3.UnitX);
+                DrawArrow(Color.Green, 2);
+                GL.PopMatrix();
+            }
+
+            foreach(SceneObject sceneObject in scene.Objects)
+            {
+                var mesh = sceneObject.Mesh;
+                GL.BindVertexArray(_vao);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
+                GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * mesh.Vertices.Length, mesh.Vertices, BufferUsageHint.DynamicDraw);
+
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ebo);
+                GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * mesh.Indices.Length, mesh.Indices, BufferUsageHint.DynamicDraw);
+
+                GL.EnableVertexAttribArray(0);
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+                GL.EnableVertexAttribArray(1);
+                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+                
+                GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+                GL.BindVertexArray(0);
+            }
+
+            GL.PopMatrix();
+
+            GL.MatrixMode(MatrixMode.Projection);
+
+            GL.PopMatrix();
+
+
+            GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.Blend);
+        }
+
+        private void DrawArrow(Color color,float length)
+        {
+            float size = 0.1f;
+            GL.Color3(color);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Vertex3(0, 0, 0);
+            GL.Vertex3(0, 0, length);
+            GL.End();
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Vertex3(0, 0, length);
+            for (int i = 0; i <= 16; i++)
+            {
+                GL.Vertex3(Math.Cos(i / 16f * 2 * Math.PI)* size, Math.Sin(i / 16f * 2 * Math.PI)* size, length*0.9);
+            }
+
+            GL.End();
+        }
     }
 }

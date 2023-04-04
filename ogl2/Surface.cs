@@ -1,23 +1,20 @@
 ﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ogl2.Presenter;
 using static OpenTK.Graphics.OpenGL.GL;
 
 namespace ogl2
 {
     internal class Surface
     {
-        public class SurfaceMesh
-        {
-            public float[] Vertices;
-            public int[] Indices;
-        }
-
-        public SurfaceMesh Mesh;
+        
+        public Mesh Mesh;
         private float _size = 1;
         private int _resolution;
         private Spline _spline;
@@ -34,14 +31,32 @@ namespace ogl2
             _spline = spline;          
         }
 
+        public void RotateCamera(Vector2 delta)
+        {
+            CameraAngle += delta * new Vector2(0.01f, -0.01f);
+            if (CameraAngle.X > 2 * Math.PI) CameraAngle.X -= (float)(2 * Math.PI);
+            if (CameraAngle.X < 0) CameraAngle.X += (float)(2 * Math.PI);
+            if (CameraAngle.Y > Math.PI / 2 * 0.9f) CameraAngle.Y = (float)(Math.PI / 2 * 0.9f);
+            if (CameraAngle.Y < -Math.PI / 2 * 0.9f) CameraAngle.Y = (float)(-Math.PI / 2 * 0.9f);         
+        }
+
+        public void Zoom(int delta)
+        {
+            CameraDistance -= delta * 0.005f;
+            if (CameraDistance > 8) CameraDistance = 8;
+            if (CameraDistance < 0.2f) CameraDistance = 0.2f;
+        }
+
+
         public void Generate()
         {
             _spline.Generate();
             _resolution = _spline.Vertices.Count;
-            Mesh = new SurfaceMesh
+            Mesh = new Mesh
             {
                 Vertices = new float[_resolution * _resolution * 6],
-                Indices = new int[(_resolution - 1) * (_resolution - 1) * 4]
+                Indices = new int[(_resolution - 1) * (_resolution - 1) * 4],
+                PrimitiveType = PrimitiveType.Quads
             };
             for (int y = 0; y < _resolution; y++)
             {

@@ -16,6 +16,7 @@ namespace ogl2
         private Fractal _fractal;
         private Spline _spline;
         private Surface _surface;
+        private Scene _scene;
 
         private Rectangle _scissorDragRect;
         public Mode CurrentMode;
@@ -32,8 +33,11 @@ namespace ogl2
             _fractal = new Fractal();
             _spline = new Spline();
             _surface = new Surface(_spline);
+            _scene = new Scene();
             _surface.CameraAngle = new Vector2((float)(-45/180f*Math.PI), (float)(45 / 180f * Math.PI));
+            _scene.CameraAngle = new Vector2((float)(-45 / 180f * Math.PI), (float)(45 / 180f * Math.PI));
             _surface.CameraDistance = 2;
+            _scene.CameraDistance = 2;
             CurrentMode = Mode.Drawing;
             _scissorSelectionDrag = false;
             _scissorDragRect = new Rectangle(0, 0, 0, 0);
@@ -50,7 +54,7 @@ namespace ogl2
 
         public enum Mode
         {
-            Drawing, ScissorSelection, Fractal,Spline,Surface
+            Drawing, ScissorSelection, Fractal,Spline,Surface,Scene
         }
 
         public void SetViewport(GLControl viewport)
@@ -112,26 +116,20 @@ namespace ogl2
             {
                 _previousMousePosition = point;
             }
+            else if (CurrentMode == Mode.Scene)
+            {
+                _previousMousePosition = point;
+            }
             Paint();
         }
-
-        private void RotateCamera(Vector2 delta)
-        {
-            _surface.CameraAngle += delta*0.01f;
-            if (_surface.CameraAngle.X > 2 * Math.PI) _surface.CameraAngle.X -= (float)(2 * Math.PI);
-            if (_surface.CameraAngle.X < 0) _surface.CameraAngle.X += (float)(2 * Math.PI);
-            if (_surface.CameraAngle.Y > Math.PI/2 * 0.9f) _surface.CameraAngle.Y = (float)(Math.PI/2*0.9f);
-            if (_surface.CameraAngle.Y < -Math.PI/2 * 0.9f) _surface.CameraAngle.Y = (float)(-Math.PI/2 * 0.9f);
-        }
-
-
+     
         private Vector2 ConvertMousePos(Vector2 pos)
         {
             var normalized = new Vector2(pos.X / _renderer.GetSize().Width, pos.Y / _renderer.GetSize().Height);
             return normalized * 2 - Vector2.One;
         }
 
-        public void MouseMove(Vector2 point,bool leftButton, bool rightButton)
+        public void MouseMove(Vector2 point,bool leftButton, bool rightButton, bool shift)
         {
             if (_scissorSelectionDrag && CurrentMode == Mode.ScissorSelection)
             {
@@ -163,7 +161,24 @@ namespace ogl2
                 {
                     var delta = point - _previousMousePosition;
                     _previousMousePosition = point;
-                    RotateCamera(delta);
+                    _surface.RotateCamera(delta);
+                    Paint();
+                }
+            }
+            else if (CurrentMode == Mode.Scene)
+            {
+                if(shift && rightButton)
+                {
+                    var delta = point - _previousMousePosition;
+                    _previousMousePosition = point;
+                    _scene.MoveCamera(delta);
+                    Paint();
+                }
+                else if (rightButton)
+                {
+                    var delta = point - _previousMousePosition;
+                    _previousMousePosition = point;
+                    _scene.RotateCamera(delta);
                     Paint();
                 }
             }
@@ -187,6 +202,11 @@ namespace ogl2
             {
                 CurrentMode = Mode.Surface;
                 _surface.Generate();
+                Paint();
+            }
+            else if (index == 5)
+            {
+                CurrentMode = Mode.Scene;
                 Paint();
             }
             else 
@@ -270,6 +290,10 @@ namespace ogl2
             else if (CurrentMode == Mode.Surface)
             {
                 _renderer.Render(_surface);
+            }
+            else if (CurrentMode == Mode.Scene)
+            {
+                _renderer.Render(_scene);
             }
             else
             {
@@ -380,10 +404,16 @@ namespace ogl2
 
         public void Zoom(int delta)
         {
-            _surface.CameraDistance -= delta * 0.005f;
-            if (_surface.CameraDistance > 8) _surface.CameraDistance = 8;
-            if (_surface.CameraDistance < 0.2f) _surface.CameraDistance = 0.2f;
-            Paint();
+            if(CurrentMode == Mode.Surface)
+            {
+                _surface.Zoom(delta);            
+                Paint();
+            }
+            else if(CurrentMode == Mode.Scene)
+            {
+                _scene.Zoom(delta);
+                Paint();
+            }
         }
     }
 }

@@ -86,11 +86,14 @@
     </Compile>
     <Compile Include="Fractal.cs" />
     <Compile Include="IRenderer.cs" />
+    <Compile Include="Mesh.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="RendererState.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="SceneObject.cs" />
     <Compile Include="Spline.cs" />
     <Compile Include="Surface.cs" />
     <EmbeddedResource Include="Form1.resx">
