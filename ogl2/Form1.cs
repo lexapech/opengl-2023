@@ -20,9 +20,8 @@ namespace ogl2
         private readonly Presenter _presenter; 
         public Form1()
         {
-            var renderer = new Renderer();
-            _presenter = new Presenter(renderer);         
-            _presenter.CursorChangeHandler += SetCursor;
+            _presenter = new Presenter();         
+            _presenter.Lab4.CursorChangeHandler += SetCursor;
             
             InitializeComponent();         
         }
@@ -73,41 +72,41 @@ namespace ogl2
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var primitiveType = GetAttribute(comboBox1, Primitives);
-            _presenter.SetPrimitiveType(primitiveType);
+            _presenter.Lab12.SetPrimitiveType(primitiveType);
 
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-            _presenter.ClearPoints();
+            _presenter.Lab12.ClearPoints();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            _presenter.SetPrimitiveSize((float)numericUpDown1.Value);
+            _presenter.Lab12.SetPrimitiveSize((float)numericUpDown1.Value);
         }
 
         private void cullingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableCulling(cullingCheckBox.Checked);
+            _presenter.Lab12.EnableCulling(cullingCheckBox.Checked);
         }
 
         private void cullingComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var mode = GetAttribute(cullingComboBox, CullFaceModes);
-            _presenter.SetCullFace(mode);
+            _presenter.Lab12.SetCullFace(mode);
         }
 
         private void polygonMode1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var polygonModeFront = GetAttribute(polygonMode1, PolygonModes);
-            _presenter.SetPolygonModeFront(polygonModeFront);
+            _presenter.Lab12.SetPolygonModeFront(polygonModeFront);
         }
 
         private void polygonMode2_SelectedIndexChanged(object sender, EventArgs e)
         {
             var polygonModeBack = GetAttribute(polygonMode2, PolygonModes);
-            _presenter.SetPolygonModeBack(polygonModeBack);
+            _presenter.Lab12.SetPolygonModeBack(polygonModeBack);
         }
 
         private void glControl1_MouseUp(object sender, MouseEventArgs e)
@@ -124,52 +123,52 @@ namespace ogl2
 
         private void scissorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableScissor(scissorCheckBox.Checked);
+            _presenter.Lab12.EnableScissor(scissorCheckBox.Checked);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            _presenter.BeginScissorSelection();
+            _presenter.Lab12.BeginScissorSelection();
         }
 
         private void scissorReset_Click(object sender, EventArgs e)
         {
-            _presenter.ClearScissorSelection();
+            _presenter.Lab12.ClearScissorSelection();
         }
 
         private void alphaComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var alphaFunction = GetAttribute(alphaComboBox,AlphaModes);
-            _presenter.SetAlphaFunction(alphaFunction);
+            _presenter.Lab12.SetAlphaFunction(alphaFunction);
         }
 
         private void alphaTrackBar_Scroll(object sender, EventArgs e)
         {
             var value = (float)alphaTrackBar.Value / alphaTrackBar.Maximum;
-            _presenter.SetAlphaRef(value);
+            _presenter.Lab12.SetAlphaRef(value);
         }
 
         private void alphaCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableAlphaTest(alphaCheckBox.Checked);
+            _presenter.Lab12.EnableAlphaTest(alphaCheckBox.Checked);
         }
 
 
         private void blendSource_SelectedIndexChanged(object sender, EventArgs e)
         {
             var blendingFactor = GetAttribute(blendSource, BlendingFactorSrcs);
-            _presenter.SetBlendingFactorSrc((BlendingFactor)blendingFactor); 
+            _presenter.Lab12.SetBlendingFactorSrc((BlendingFactor)blendingFactor); 
         }
 
         private void blendDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
             var blendingFactor = GetAttribute(blendSource, BlendingFactorDests);
-            _presenter.SetBlendingFactorDest((BlendingFactor)blendingFactor);
+            _presenter.Lab12.SetBlendingFactorDest((BlendingFactor)blendingFactor);
         }
 
         private void blendCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableBlending(blendCheckBox.Checked);
+            _presenter.Lab12.EnableBlending(blendCheckBox.Checked);
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -179,23 +178,23 @@ namespace ogl2
 
         private void fractalSteps_ValueChanged(object sender, EventArgs e)
         {
-            _presenter.SetFractalSteps((int)fractalSteps.Value);
+            _presenter.Lab3.SetFractalSteps((int)fractalSteps.Value);
         }
 
         private void ChangeSeedButton_Click(object sender, EventArgs e)
         {
-            _presenter.ChangeFractalSeed();
+            _presenter.Lab3.ChangeFractalSeed();
         }
 
         private void curveScale_Scroll(object sender, EventArgs e)
         {
             var value = (float)curveScale.Value / curveScale.Maximum;
-            _presenter.SetSplineScale(value);
+            _presenter.Lab4.SetSplineScale(value);
         }
 
         private void curveSteps_ValueChanged(object sender, EventArgs e)
         {
-            _presenter.SetSplineSteps((int)curveSteps.Value);
+            _presenter.Lab4.SetSplineSteps((int)curveSteps.Value);
         }
 
         private void SetCursor(bool hand)
@@ -205,12 +204,12 @@ namespace ogl2
 
         private void cardinalCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableCardinalSpline(cardinalCheckBox.Checked);
+            _presenter.Lab4.EnableCardinalSpline(cardinalCheckBox.Checked);
         }
 
         private void BezierCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            _presenter.EnableBezierSpline(BezierCheckBox.Checked);
+            _presenter.Lab4.EnableBezierSpline(BezierCheckBox.Checked);
         }
 
         private void label13_Click(object sender, EventArgs e)
@@ -223,7 +222,7 @@ namespace ogl2
             var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
                 trackBar2.Value / (float)trackBar2.Maximum,
                 trackBar3.Value / (float)trackBar3.Maximum);
-            _presenter.SetSurfaceLightPosition(pos);
+            _presenter.Lab5.SetSurfaceLightPosition(pos);
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
@@ -231,7 +230,7 @@ namespace ogl2
             var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
                 trackBar2.Value / (float)trackBar2.Maximum,
                 trackBar3.Value / (float)trackBar3.Maximum);
-            _presenter.SetSurfaceLightPosition(pos);
+            _presenter.Lab5.SetSurfaceLightPosition(pos);
         }
 
         private void trackBar3_Scroll(object sender, EventArgs e)
@@ -239,7 +238,7 @@ namespace ogl2
             var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
                 trackBar2.Value / (float)trackBar2.Maximum,
                 trackBar3.Value / (float)trackBar3.Maximum);
-            _presenter.SetSurfaceLightPosition(pos);
+            _presenter.Lab5.SetSurfaceLightPosition(pos);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -247,7 +246,7 @@ namespace ogl2
             var pos = new Vector3(trackBar1.Value / (float)trackBar1.Maximum,
                 trackBar2.Value / (float)trackBar2.Maximum,
                 trackBar3.Value / (float)trackBar3.Maximum);
-            _presenter.SetSurfaceLightPosition(pos);
+            _presenter.Lab5.SetSurfaceLightPosition(pos);
 
             glControl1.MouseWheel += new MouseEventHandler(glControl1_MouseWheel);
         }

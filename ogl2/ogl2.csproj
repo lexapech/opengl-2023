@@ -77,25 +77,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeMappings.cs" />
+    <Compile Include="src\Common\AttributeMappings.cs" />
+    <Compile Include="src\Common\CommonRenderer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fractal.cs" />
-    <Compile Include="IRenderer.cs" />
-    <Compile Include="Mesh.cs" />
-    <Compile Include="Presenter.cs" />
+    <Compile Include="src\Lab3\Fractal.cs" />
+    <Compile Include="src\Common\ILab.cs" />
+    <Compile Include="src\Lab12\Lab12Renderer.cs" />
+    <Compile Include="src\Lab12\Lab12Controller.cs" />
+    <Compile Include="src\Common\Mesh.cs" />
+    <Compile Include="src\Common\Presenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Renderer.cs" />
-    <Compile Include="RendererState.cs" />
-    <Compile Include="Scene.cs" />
-    <Compile Include="SceneObject.cs" />
-    <Compile Include="Spline.cs" />
-    <Compile Include="Surface.cs" />
+    <Compile Include="src\Lab12\RendererState.cs" />
+    <Compile Include="src\Lab6\Scene.cs" />
+    <Compile Include="src\Lab6\SceneObject.cs" />
+    <Compile Include="src\Lab4\Spline.cs" />
+    <Compile Include="src\Lab3\Lab3Controller.cs" />
+    <Compile Include="src\Lab3\Lab3Renderer.cs" />
+    <Compile Include="src\Lab4\Lab4Controller.cs" />
+    <Compile Include="src\Lab4\Lab4Renderer.cs" />
+    <Compile Include="src\Lab5\Lab5Controller.cs" />
+    <Compile Include="src\Lab5\Lab5Renderer.cs" />
+    <Compile Include="src\Lab6\Lab6Controller.cs" />
+    <Compile Include="src\Lab6\Lab6Renderer.cs" />
+    <Compile Include="src\Lab5\Surface.cs" />
+    <Compile Include="src\Common\Utility.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
