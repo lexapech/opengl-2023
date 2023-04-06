@@ -94,6 +94,7 @@ namespace ogl2
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label13 = new System.Windows.Forms.Label();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -325,6 +326,7 @@ namespace ogl2
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Location = new System.Drawing.Point(609, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -800,6 +802,15 @@ namespace ogl2
             this.label13.Text = "X";
             this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(181, 400);
+            this.tabPage6.TabIndex = 4;
+            this.tabPage6.Text = "Лаб. 6";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -809,7 +820,7 @@ namespace ogl2
             this.Controls.Add(this.glControl1);
             this.Icon = global::ogl2.Properties.Resources.opengl_logo;
             this.Name = "Form1";
-            this.Text = "Печеркин А. С. 0381 Лаб. 1-5";
+            this.Text = "Печеркин А. С. 0381 Лаб. 1-6";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
@@ -922,6 +933,7 @@ namespace ogl2
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TrackBar trackBar3;
         private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.TabPage tabPage6;
     }
 }
 

@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using static ogl2.Renderer;
 
 namespace ogl2
 {
     internal class RendererState
     {
+
+        public readonly Color[] Colors = { Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.LightBlue, Color.Blue, Color.Purple };
+        public readonly float[] Alphas = { 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f };
+
         public GLControl Viewport;
         public PrimitiveType SelectedPrimitive;
         public List<Vector2> Vertices = new List<Vector2>();
