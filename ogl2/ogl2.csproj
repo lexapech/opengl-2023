@@ -94,6 +94,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Lab12\RendererState.cs" />
+    <Compile Include="src\Lab6\CubeGenerator.cs" />
+    <Compile Include="src\Lab6\MeshGenerator.cs" />
     <Compile Include="src\Lab6\Scene.cs" />
     <Compile Include="src\Lab6\SceneObject.cs" />
     <Compile Include="src\Lab4\Spline.cs" />

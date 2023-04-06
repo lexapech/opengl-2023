@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using ogl2.src.Lab6;
+using OpenTK;
 using OpenTK.Graphics.ES11;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,34 @@ namespace ogl2
         public Mesh Mesh { get; private set; }
         public Vector3 Position;
         public Quaternion Rotation;
-        public SceneObject(string name)
+        public Vector3 AbsScale;
+
+        public SceneObject(string name,MeshGenerator generator)
         {
             Name = name;
-            Rotation = new Quaternion();
+            Rotation = Quaternion.Identity;
             Position = new Vector3();
-
-            Mesh = new Mesh()
-            {
-                Vertices = new float[] {0,0,0,1,0,0, 1,0,0 ,1,0,0, 0,1,0,1,0,0 },
-                Indices = new int[] {0,1,2 },
-                PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType.Triangles
-            };
+            AbsScale = Vector3.One;
+            generator.Generate();
+            Mesh = generator.GetMesh();
         }
+
+        public SceneObject Translate(Vector3 delta)
+        {
+            Position += delta;
+            return this;
+        }
+        public SceneObject Rotate(Vector3 axis,float angle)
+        {
+            Rotation = Quaternion.FromAxisAngle(axis, (float)(angle / 180f * Math.PI)) * Rotation;
+            return this;
+        }
+        public SceneObject Scale(Vector3 scale)
+        {
+            AbsScale *= scale;
+            return this;
+        }
+
 
     }
 }

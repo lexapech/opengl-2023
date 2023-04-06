@@ -21,8 +21,12 @@ namespace ogl2.src.Lab6
             _scene = new Scene
             {
                 CameraAngle = new Vector2((float)(-45 / 180f * Math.PI), (float)(45 / 180f * Math.PI)),
-                CameraDistance = 2
+                CameraDistance = 8
             };
+
+            _scene.AddObject("cube", new CubeGenerator().SetColor(Color.LightBlue));
+            var cube = _scene.GetObject("cube");
+            //cube.Translate(new Vector3(1, 0, 0)).Rotate(Vector3.UnitY,45).Scale(new Vector3(1,1,0.5f));
         }
 
         private void LoadShaders(string vertex, string fragment)
@@ -38,7 +42,7 @@ namespace ogl2.src.Lab6
             if (!_loaded)
             {
                 _renderer.Init();
-                LoadShaders("vertex.glsl", "fragment.glsl");
+                LoadShaders("vertex6.glsl", "fragment6.glsl");
                 _loaded = true;
             }
             Paint();
@@ -78,7 +82,9 @@ namespace ogl2.src.Lab6
 
         public void Zoom(int delta)
         {
-            _scene.Zoom(delta);
+            //_scene.Zoom(delta);
+            var cube = _scene.GetObject("cube");
+            cube.Rotate(Vector3.UnitY, delta*0.05f);
             Paint();
         }
     }

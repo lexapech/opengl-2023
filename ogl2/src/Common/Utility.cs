@@ -23,5 +23,10 @@ namespace ogl2
             return Rectangle.FromLTRB((int)min.X, (int)min.Y, (int)max.X, (int)max.Y);
         }
 
+        public static Vector4 ConvertColor(Color color)
+        {
+            return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+        }
+
     }
 }

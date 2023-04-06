@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using ogl2.src.Lab6;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,24 @@ namespace ogl2
         {
             CameraDistance = 2;
             CameraFocus = Vector3.Zero;
-            Objects.Add(new SceneObject("cum"));
         }
 
+        public void AddObject(string name, MeshGenerator generator, Vector3 pos)
+        {
+            var obj = new SceneObject(name,generator);
+            obj.Position = pos;
+            Objects.Add(obj);
+        }
+
+        public SceneObject GetObject(string name)
+        {
+            return Objects.Find(x => x.Name == name);
+        }
+
+        public void AddObject(string name, MeshGenerator generator)
+        {
+            AddObject(name, generator, Vector3.Zero);
+        }
         public void RotateCamera(Vector2 delta)
         {
             CameraAngle += delta * new Vector2( 0.01f, -0.01f);
