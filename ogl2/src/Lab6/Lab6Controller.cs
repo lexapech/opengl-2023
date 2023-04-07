@@ -84,7 +84,7 @@ namespace ogl2.src.Lab6
         {
             //_scene.Zoom(delta);
             var cube = _scene.GetObject("cube");
-            cube.Rotate(Vector3.UnitY, delta*0.05f);
+            cube.Rotate(_scene.CameraDirection, delta*0.05f);
             Paint();
         }
     }
