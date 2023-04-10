@@ -25,6 +25,7 @@ namespace ogl2.src.Lab6
             };
 
             _scene.AddObject("cube", new CubeGenerator().SetColor(Color.LightBlue));
+            _scene.AddObject("cube2", new CubeGenerator().SetColor(Color.LightBlue)).Translate(new Vector3(3,0,0));
             var cube = _scene.GetObject("cube");
             //cube.Translate(new Vector3(1, 0, 0)).Rotate(Vector3.UnitY,45).Scale(new Vector3(1,1,0.5f));
         }
@@ -50,6 +51,7 @@ namespace ogl2.src.Lab6
 
         public void MouseDown(Vector2 pos)
         {
+            Console.WriteLine(_renderer.ReadId(pos));
         }
 
         public void MouseMove(Vector2 pos, Vector2 previousMousePos, bool leftButton, bool rightButton, bool shift)
@@ -82,9 +84,9 @@ namespace ogl2.src.Lab6
 
         public void Zoom(int delta)
         {
-            //_scene.Zoom(delta);
-            var cube = _scene.GetObject("cube");
-            cube.Rotate(_scene.CameraDirection, delta*0.05f);
+            _scene.Zoom(delta);
+            /*var cube = _scene.GetObject("cube");
+            cube.Rotate(_scene.CameraDirection, delta*0.05f);*/
             Paint();
         }
     }

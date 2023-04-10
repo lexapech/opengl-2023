@@ -1,6 +1,7 @@
 ﻿using ogl2.src.Lab5;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Platform.MacOS;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,14 +19,38 @@ namespace ogl2.src.Lab6
         private int _vao;
         private int _vbo;
         private int _ebo;
+        private int _fbo;
         private int _program = 0;
         private bool _shaderLoaded = false;
+        private int[] _textures = new int[3];
 
         public Lab6Renderer(CommonRenderer commonRenderer, Lab6Controller controller)
         {
             CommonRenderer = commonRenderer;
             _controller = controller;
+            CommonRenderer.Resized += Resize;
         }
+
+        private void Resize(Size newSize)
+        {
+            InitTextures();
+        }
+
+        private void InitTextures()
+        {
+            var size = CommonRenderer.GetSize();
+            GL.BindTexture(TextureTarget.Texture2D, _textures[0]);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, size.Width, size.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+            GL.BindTexture(TextureTarget.Texture2D, _textures[1]);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8i, size.Width, size.Height, 0, PixelFormat.RedInteger, PixelType.Int, IntPtr.Zero);
+
+            GL.BindTexture(TextureTarget.Texture2D, _textures[2]);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, size.Width, size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
 
         public void Init()
         {
@@ -33,6 +58,25 @@ namespace ogl2.src.Lab6
             _vao = GL.GenVertexArray();
             _vbo = GL.GenBuffer();
             _ebo = GL.GenBuffer();
+            _fbo = GL.GenFramebuffer();
+            GL.GenTextures(_textures.Length, _textures);
+            for(int i=0;i<_textures.Length;i++)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, _textures[i]);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,(int)TextureMagFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+            }
+            InitTextures();
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _fbo);
+
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, _textures[0], 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, _textures[1], 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _textures[2], 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
         public void LoadShaders(string vertex, string fragment)
@@ -57,9 +101,21 @@ namespace ogl2.src.Lab6
 
         }
 
+        public int ReadId(Vector2 pos)
+        {
+            int[] pixels = new int[1];
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, _fbo);
+            GL.ReadBuffer(ReadBufferMode.ColorAttachment1);
+            GL.ReadPixels((int)pos.X, (int)pos.Y, 1, 1, PixelFormat.RedInteger, PixelType.UnsignedByte,pixels);
+            GL.ReadBuffer(ReadBufferMode.ColorAttachment0);
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
+            return pixels[0];
+        }
+
         public void Render()
         {
             var scene = _controller.Scene;
+            var size = CommonRenderer.GetSize();
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
             GL.Enable(EnableCap.DepthTest);
@@ -77,16 +133,21 @@ namespace ogl2.src.Lab6
             //modelView = Matrix4.CreateTranslation(0, 0, -surface.Size/2)*modelView;
             GL.LoadMatrix(ref view);
 
-            if (scene.ShowAxis)
-            {
-                GL.PushMatrix();
-                DrawArrow(Color.Blue, 2);
-                GL.Rotate(90, Vector3.UnitY);
-                DrawArrow(Color.Red, 2);
-                GL.Rotate(-90, Vector3.UnitX);
-                DrawArrow(Color.Green, 2);
-                GL.PopMatrix();
-            }
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _fbo);
+            DrawBuffersEnum[] drawBuffersEnum = new DrawBuffersEnum[]{
+                DrawBuffersEnum.ColorAttachment0,
+                DrawBuffersEnum.ColorAttachment1
+            };
+            GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
+           
+            CommonRenderer.Clear();
+            
+            GL.DrawBuffer(DrawBufferMode.ColorAttachment1);
+            GL.ClearColor(0, 0, 0, 0);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+
+            GL.DrawBuffers(drawBuffersEnum.Length, drawBuffersEnum);
 
             foreach (SceneObject sceneObject in scene.Objects)
             {
@@ -120,6 +181,8 @@ namespace ogl2.src.Lab6
                 var vp = view * perspectiveMatrix;
                 GL.UniformMatrix4(GL.GetUniformLocation(_program, "mMatrix"), false, ref model);
                 GL.UniformMatrix4(GL.GetUniformLocation(_program, "vpMatrix"), false, ref vp);
+                GL.Uniform1(GL.GetUniformLocation(_program, "id"),sceneObject.Id);
+                GL.Uniform3(GL.GetUniformLocation(_program, "lightSource"), new Vector3(2,2,2));
 
                 GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -128,6 +191,26 @@ namespace ogl2.src.Lab6
                 GL.BindVertexArray(0);
                
             }
+
+            GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
+            if (scene.ShowAxis)
+            {
+                GL.PushMatrix();
+                DrawArrow(Color.Blue, 2);
+                GL.Rotate(90, Vector3.UnitY);
+                DrawArrow(Color.Red, 2);
+                GL.Rotate(-90, Vector3.UnitX);
+                DrawArrow(Color.Green, 2);
+                GL.PopMatrix();
+            }
+
+
+
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);  // if not already bound
+            //GL.ReadBuffer(ReadBufferMode.ColorAttachment0);
+            GL.BlitFramebuffer(0, 0, size.Width, size.Height, 0, 0, size.Width, size.Height,
+                              ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit,BlitFramebufferFilter.Nearest);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             GL.PopMatrix();
 

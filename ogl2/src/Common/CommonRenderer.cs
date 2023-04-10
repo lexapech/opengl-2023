@@ -14,6 +14,10 @@ namespace ogl2
     {
         private GLControl _viewport;
 
+        public delegate void ResizeDelegate(Size newSize);
+
+        public event ResizeDelegate Resized;
+
         public void SetViewport(GLControl viewport)
         {
             _viewport = viewport;
@@ -39,7 +43,8 @@ namespace ogl2
         public void Resize()
         {
             _viewport.MakeCurrent();
-            GL.Viewport(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);           
+            GL.Viewport(0, 0, _viewport.ClientSize.Width, _viewport.ClientSize.Height);
+            Resized?.Invoke(_viewport.Size);
         }
 
         public Size GetSize()

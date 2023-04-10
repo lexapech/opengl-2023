@@ -16,8 +16,9 @@ namespace ogl2
         public Vector3 Position;
         public Quaternion Rotation;
         public Vector3 AbsScale;
+        public readonly int Id;
 
-        public SceneObject(string name,MeshGenerator generator)
+        public SceneObject(string name,MeshGenerator generator, int id)
         {
             Name = name;
             Rotation = Quaternion.Identity;
@@ -25,6 +26,7 @@ namespace ogl2
             AbsScale = Vector3.One;
             generator.Generate();
             Mesh = generator.GetMesh();
+            Id = id;
         }
 
         public SceneObject Translate(Vector3 delta)

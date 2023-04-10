@@ -17,6 +17,7 @@ namespace ogl2
         public Vector3 CameraFocus;
         public float CameraDistance;
         public Vector2 CameraAngle;
+        private int _lastId = 1;
 
         public Scene()
         {
@@ -24,11 +25,12 @@ namespace ogl2
             CameraFocus = Vector3.Zero;
         }
 
-        public void AddObject(string name, MeshGenerator generator, Vector3 pos)
+        public SceneObject AddObject(string name, MeshGenerator generator, Vector3 pos)
         {
-            var obj = new SceneObject(name,generator);
+            var obj = new SceneObject(name,generator, _lastId++);
             obj.Position = pos;
             Objects.Add(obj);
+            return obj;
         }
 
         public SceneObject GetObject(string name)
@@ -36,9 +38,9 @@ namespace ogl2
             return Objects.Find(x => x.Name == name);
         }
 
-        public void AddObject(string name, MeshGenerator generator)
+        public SceneObject AddObject(string name, MeshGenerator generator)
         {
-            AddObject(name, generator, Vector3.Zero);
+            return AddObject(name, generator, Vector3.Zero);
         }
         public void RotateCamera(Vector2 delta)
         {
