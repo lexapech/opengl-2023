@@ -25,15 +25,66 @@ namespace ogl2.src.Lab6
             _renderer = new Lab6Renderer(commonRenderer, this);
             _scene = new Scene
             {
-                CameraAngle = new Vector2((float)(-45 / 180f * Math.PI), (float)(45 / 180f * Math.PI)),
-                CameraDistance = 8
+                CameraAngle = new Vector2((float)(90 / 180f * Math.PI), (float)(0 / 180f * Math.PI)),
+                CameraDistance = 15
             };
-
-            _scene.AddObject("cube", new CubeGenerator().SetColor(Color.LightBlue));
-            _scene.AddObject("cube2", new CubeGenerator().SetColor(Color.LightBlue)).Translate(new Vector3(3,0,0));
-            var cube = _scene.GetObject("cube");
-            //cube.Translate(new Vector3(1, 0, 0)).Rotate(Vector3.UnitY,45).Scale(new Vector3(1,1,0.5f));
+            InitScene();
         }
+
+        private void InitScene()
+        {
+            _scene.AddObject("cube", new CubeGenerator()
+                .SetColor(Color.LightBlue))
+                .Translate(new Vector3(-2.5f, 1.5f, 0))
+                .EulerAngles = new Vector3 (40, -25 , 30) / 180f * (float)Math.PI;
+            _scene.AddObject("cube2", new CubeGenerator()
+                .SetColor(Color.LightBlue))
+                .Translate(new Vector3(3.6f, -0.3f, 0))
+                .Scale(new Vector3(0.7f,0.1f,0.25f))
+                .EulerAngles = new Vector3(55, -30, 30) / 180f * (float)Math.PI;
+            _scene.AddObject("sphere1", new SphereGenerator(16)
+                .SetColor(Color.LightGray))
+                .Translate(new Vector3(-0.5f, 1.9f, 0.3f));
+            _scene.AddObject("sphere2", new SphereGenerator(16)
+                .SetColor(Color.LightGoldenrodYellow))
+                .Translate(new Vector3(-1.1f, 0, 0.3f))
+                .Scale(Vector3.One* 0.3f);
+            _scene.AddObject("cyl1", new CylinderGenerator(16)
+                .SetColor(Color.Purple))
+                .Translate(new Vector3(-1.8f, -2.1f, 0))
+                .Scale(new Vector3(0.5f, 1.9f, 0.5f))
+                .EulerAngles = new Vector3(160, -30, 50) / 180f * (float)Math.PI;
+            _scene.AddObject("cyl2", new CylinderGenerator(3)
+                .SetNormalsSmoothing(false)
+                .SetColor(Color.Aquamarine))
+                .Translate(new Vector3(0.9f, -0f, 0))
+                .Scale(new Vector3(0.5f, 0.5f, 0.5f))
+                .EulerAngles = new Vector3(100, -160, 0) / 180f * (float)Math.PI;
+            _scene.AddObject("cyl3", new CylinderGenerator(6)
+                .SetNormalsSmoothing(false)
+                .SetColor(Color.PaleVioletRed))
+                .Translate(new Vector3(1.9f, -1.4f, 0))
+                .Scale(new Vector3(0.5f, 0.3f, 0.5f))
+                .EulerAngles = new Vector3(85, -170, -35) / 180f * (float)Math.PI;
+            _scene.AddObject("stair1", new StairsGenerator(5)
+                .SetColor(Color.Beige))
+                .Translate(new Vector3(-3.5f, -1.4f, 0))
+                .Scale(new Vector3(1f, 1f, 1f))
+                .EulerAngles = new Vector3(-100, -110, -120) / 180f * (float)Math.PI;
+            _scene.AddObject("stair2", new StairsGenerator(5)
+                .SetColor(Color.DarkViolet))
+                .Translate(new Vector3(1.4f, -2.9f, 0.6f))
+                .Scale(new Vector3(1.5f, 1.9f, 1.2f))
+                .EulerAngles = new Vector3(-90, -10, -90) / 180f * (float)Math.PI;
+            _scene.AddObject("pipe1", new PipeGenerator(16,0.5f)
+                .SetColor(Color.Cyan))
+                .Translate(new Vector3(3.2f, 1.9f, 0.3f))
+                .Scale(new Vector3(0.4f, 1.7f, 0.4f))
+                .EulerAngles = new Vector3(110, 0, 30) / 180f * (float)Math.PI;
+
+
+        }
+
 
         private void LoadShaders(string vertex, string fragment,string outline)
         {
@@ -116,10 +167,23 @@ namespace ogl2.src.Lab6
             _scene.WireframeMode = enabled;
             Paint();
         }
-
-        public void UpdateSelected(Vector3 pos,Vector3 rotation,Vector3 scale)
+        public void SetTransparent(bool enabled)
         {
-            _scene.UpdateSelected(pos, rotation, scale);
+            _scene.Transparent = enabled;
+            Paint();
+        }
+
+        public void SetCoordAxis(bool enabled)
+        {
+            _scene.ShowAxis = enabled;
+            Paint();
+        }
+
+
+        public void UpdateSelected(Vector3 pos,Vector3 rotation,Vector3 scale,int steps)
+        {
+            if(steps<3) steps = 3;
+            _scene.UpdateSelected(pos, rotation, scale, steps);
             Paint();
         }
     }

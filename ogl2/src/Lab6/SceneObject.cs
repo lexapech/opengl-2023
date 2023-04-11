@@ -4,6 +4,8 @@ using OpenTK.Graphics.ES11;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,24 @@ namespace ogl2
         public Vector3 AbsScale;
         public readonly int Id;
         private Vector3 _eulerAngles;
+        private MeshGenerator _generator;
+        public int Steps 
+        { 
+            get 
+            {
+                return _generator.GetSteps();
+            } 
+            set
+            {
+                var old = _generator.GetSteps();
+                if (old != value)
+                {
+                    _generator.SetSteps(value);
+                    Mesh = _generator.GetMesh();
+                }
+            }
+        }
+
         public Vector3 EulerAngles {
             get
             {
@@ -37,10 +57,11 @@ namespace ogl2
             Rotation = Quaternion.Identity;
             Position = new Vector3();
             AbsScale = Vector3.One;
-            generator.Generate();
+            _generator = generator;    
             Mesh = generator.GetMesh();
             Id = id;
         }
+
 
         public SceneObject Translate(Vector3 delta)
         {

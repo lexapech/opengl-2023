@@ -12,9 +12,9 @@ out vec4 vertexColor;
 
 void main()
 {
-	vertexNormal = (mMatrix * vec4( normal,1.0)).xyz;
+	vertexNormal = normalize(mat3(mMatrix) * normal);
 	vertexPos = (mMatrix * vec4( vertexPosition,1.0)).xyz;
-    vertexColor = color;
+    vertexColor = vec4(color.rgb,0.5);
 	
     gl_Position = vpMatrix*mMatrix * vec4(vertexPosition, 1.0);
 }

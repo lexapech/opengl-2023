@@ -28,6 +28,21 @@ namespace ogl2.src.Lab6
 
         abstract public void Generate();
 
+        virtual public MeshGenerator SetNormalsSmoothing(bool enabled)
+        {
+            return this;
+        }
+
+        virtual public MeshGenerator SetSteps(int steps)
+        {
+            return this;
+        }
+
+        virtual public int GetSteps()
+        {
+            return 1;
+        }
+
         public MeshGenerator SetColor(Color color)
         {
             _triangles = new List<Triangle>();
@@ -75,9 +90,11 @@ namespace ogl2.src.Lab6
                 data.Add(t.v3.Color.Z);
                 data.Add(t.v3.Color.W);
             }
+           
             mesh.Vertices = data.ToArray();
             mesh.PrimitiveType = OpenTK.Graphics.OpenGL.PrimitiveType.Triangles;
             mesh.Indices = Enumerable.Range(0, _triangles.Count * 3).ToArray();
+            _triangles.Clear();
             return mesh;
         }
 
@@ -89,6 +106,11 @@ namespace ogl2.src.Lab6
                 v2 = v2,
                 v3 = v3
             });
+        }
+        protected void AddQuad(Vector3[] verts, int[] indices, Vector4 color)
+        {
+            AddTriangle(verts[indices[0]], verts[indices[1]], verts[indices[2]], color);
+            AddTriangle(verts[indices[0]], verts[indices[2]], verts[indices[3]], color);
         }
 
         protected void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector4 color)

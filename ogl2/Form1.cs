@@ -47,6 +47,17 @@ namespace ogl2
             Lab6_Selected_SX.Value = (decimal)sceneObject.AbsScale.X;
             Lab6_Selected_SY.Value = (decimal)sceneObject.AbsScale.Y;
             Lab6_Selected_SZ.Value = (decimal)sceneObject.AbsScale.Z;
+            if (sceneObject.Steps < 3)
+            {
+                label20.Visible = false;
+                Lab6_Division.Visible = false;
+            }
+            else
+            {
+                label20.Visible = true;
+                Lab6_Division.Visible = true;
+                Lab6_Division.Value = sceneObject.Steps;
+            }              
             _selectedEvent = true;
         }
 
@@ -67,7 +78,7 @@ namespace ogl2
             scale.X = (float)Lab6_Selected_SX.Value;
             scale.Y = (float)Lab6_Selected_SY.Value;
             scale.Z = (float)Lab6_Selected_SZ.Value;
-            _presenter.Lab6.UpdateSelected(pos,angles, scale);
+            _presenter.Lab6.UpdateSelected(pos,angles, scale,(int)Lab6_Division.Value);
         }
 
 
@@ -360,6 +371,21 @@ namespace ogl2
         private void Lab6_Selected_SZ_ValueChanged(object sender, EventArgs e)
         {
             ChangeSelectedProps();
+        }
+
+        private void Lab6_Transparent_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.SetTransparent(Lab6_Transparent.Checked);
+        }
+
+        private void Lab6_Division_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_CoordAxis_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.SetCoordAxis(Lab6_CoordAxis.Checked);
         }
     }
 }

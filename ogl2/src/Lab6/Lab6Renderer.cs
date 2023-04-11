@@ -161,7 +161,7 @@ namespace ogl2.src.Lab6
 
             ClearFramebuffer();
 
-            foreach (SceneObject sceneObject in scene.Objects.OrderBy(x=>x.Id==scene.SelectedId?0:1))
+            foreach (SceneObject sceneObject in scene.Objects.OrderBy(x=>x.Id == scene.SelectedId?0:1))
             {
                 DrawObject(sceneObject, scene, view);
             }
@@ -201,7 +201,7 @@ namespace ogl2.src.Lab6
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
-            var view = Matrix4.LookAt(scene.CameraDirection * scene.CameraDistance + scene.CameraFocus, scene.CameraFocus, Vector3.UnitY);
+            var view = Matrix4.LookAt(scene.CameraPosition, scene.CameraFocus, Vector3.UnitY);
             GL.LoadMatrix(ref view);
             return view;
         }
@@ -254,6 +254,7 @@ namespace ogl2.src.Lab6
             else
             {
                 GL.Uniform3(GL.GetUniformLocation(mainShader, "lightSource"), scene.LightPosition);
+                GL.Uniform3(GL.GetUniformLocation(mainShader, "cameraPos"), scene.CameraPosition);
                 GL.Uniform1(GL.GetUniformLocation(mainShader, "id"), sceneObject.Id);
             }
 
@@ -262,11 +263,18 @@ namespace ogl2.src.Lab6
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
                 GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
             }
+            if (scene.Transparent)
+            {
+                GL.Enable(EnableCap.Blend);
+                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            }
 
 
             GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
+
+            GL.Disable(EnableCap.Blend);
 
             if (outlined && !scene.WireframeMode)
             {

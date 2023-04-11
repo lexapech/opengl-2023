@@ -19,14 +19,16 @@ namespace ogl2
 
         public ProjectionEnum Projection;
         public List<SceneObject> Objects = new List<SceneObject>();
-        public bool ShowAxis = true;
+        public bool ShowAxis = false;
         public Vector3 CameraFocus;
         public float CameraDistance;
         public Vector2 CameraAngle;
+        public Vector3 CameraPosition { get { return CameraFocus + CameraDistance * CameraDirection; } }
         private int _lastId = 1;
         private int _selectedId = 0;
         public bool WireframeMode = false;
-        public Vector3 LightPosition = new Vector3(100, 100, 100);
+        public bool Transparent = false;
+        public Vector3 LightPosition = new Vector3(10, 10, 10);
 
         public SceneObject SelectedObject{
             get
@@ -65,7 +67,7 @@ namespace ogl2
             else _selectedId = 0;
         }
 
-        public void UpdateSelected(Vector3 pos, Vector3 rotation, Vector3 scale)
+        public void UpdateSelected(Vector3 pos, Vector3 rotation, Vector3 scale,int steps)
         {
             var obj = SelectedObject;
             if(obj != null)
@@ -73,6 +75,7 @@ namespace ogl2
                 obj.Position = pos;
                 obj.EulerAngles = rotation;
                 obj.AbsScale = scale;
+                obj.Steps = steps;
             }         
         }
 

@@ -96,6 +96,8 @@
     <Compile Include="src\Lab12\RendererState.cs" />
     <Compile Include="src\Lab6\CubeGenerator.cs" />
     <Compile Include="src\Lab6\MeshGenerator.cs" />
+    <Compile Include="src\Lab6\CylinderGenerator.cs" />
+    <Compile Include="src\Lab6\PipeGenerator.cs" />
     <Compile Include="src\Lab6\Scene.cs" />
     <Compile Include="src\Lab6\SceneObject.cs" />
     <Compile Include="src\Lab4\Spline.cs" />
@@ -109,6 +111,8 @@
     <Compile Include="src\Lab6\Lab6Renderer.cs" />
     <Compile Include="src\Lab5\Surface.cs" />
     <Compile Include="src\Common\Utility.cs" />
+    <Compile Include="src\Lab6\SphereGenerator.cs" />
+    <Compile Include="src\Lab6\StairsGenerator.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
