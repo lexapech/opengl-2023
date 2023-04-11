@@ -40,9 +40,9 @@ namespace ogl2
             Lab6_Selected_Y.Value = (decimal)sceneObject.Position.Y;
             Lab6_Selected_Z.Value = (decimal)sceneObject.Position.Z;
 
-            Lab6_Selected_Pitch.Value = (decimal)(sceneObject.EulerAngles.X * 180f / Math.PI);
-            Lab6_Selected_Yaw.Value = (decimal)(sceneObject.EulerAngles.Y * 180f / Math.PI);
-            Lab6_Selected_Roll.Value = (decimal)(sceneObject.EulerAngles.Z * 180f / Math.PI);
+            Lab6_Selected_Pitch.Value = (decimal)Utility.Clamp((float)(sceneObject.EulerAngles.X * 180f / Math.PI),-180,180);
+            Lab6_Selected_Yaw.Value = (decimal)Utility.Clamp((float)(sceneObject.EulerAngles.Y * 180f / Math.PI), -180, 180);
+            Lab6_Selected_Roll.Value = (decimal)Utility.Clamp((float)(sceneObject.EulerAngles.Z * 180f / Math.PI), -180, 180);
 
             Lab6_Selected_SX.Value = (decimal)sceneObject.AbsScale.X;
             Lab6_Selected_SY.Value = (decimal)sceneObject.AbsScale.Y;

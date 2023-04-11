@@ -28,5 +28,10 @@ namespace ogl2
             return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
         }
 
+        public static float Clamp(float value,float min,float max) 
+        {
+            return Math.Max(min, Math.Min(value, max));
+        }
+
     }
 }
