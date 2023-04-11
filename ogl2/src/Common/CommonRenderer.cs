@@ -36,8 +36,7 @@ namespace ogl2
         {
             _viewport.MakeCurrent();
             GL.ClearColor(Color4.MidnightBlue);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.Clear(ClearBufferMask.DepthBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
         }
 
         public void Resize()

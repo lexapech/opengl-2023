@@ -33,7 +33,7 @@ namespace ogl2.src.Lab3
             Paint();
         }
 
-        public void MouseDown(Vector2 pos)
+        public void MouseDown(Vector2 pos, bool leftButton, bool rightButton, bool shift)
         {
             
         }

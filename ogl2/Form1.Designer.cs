@@ -95,6 +95,24 @@ namespace ogl2
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label13 = new System.Windows.Forms.Label();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.Lab6_Ortho = new System.Windows.Forms.CheckBox();
+            this.Lab6_wireframe = new System.Windows.Forms.CheckBox();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.Lab6_SelectedName = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.Lab6_Selected_X = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_Y = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_Z = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.Lab6_Selected_Roll = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_Yaw = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_Pitch = new System.Windows.Forms.NumericUpDown();
+            this.label19 = new System.Windows.Forms.Label();
+            this.Lab6_Selected_SZ = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_SY = new System.Windows.Forms.NumericUpDown();
+            this.Lab6_Selected_SX = new System.Windows.Forms.NumericUpDown();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -125,6 +143,19 @@ namespace ogl2
             ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            this.flowLayoutPanel5.SuspendLayout();
+            this.panel15.SuspendLayout();
+            this.panel13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_X)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Y)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Z)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Roll)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Yaw)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Pitch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SZ)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SX)).BeginInit();
             this.SuspendLayout();
             // 
             // glControl1
@@ -804,12 +835,326 @@ namespace ogl2
             // 
             // tabPage6
             // 
+            this.tabPage6.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabPage6.Controls.Add(this.flowLayoutPanel5);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(181, 400);
             this.tabPage6.TabIndex = 4;
             this.tabPage6.Text = "Лаб. 6";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // flowLayoutPanel5
+            // 
+            this.flowLayoutPanel5.Controls.Add(this.panel15);
+            this.flowLayoutPanel5.Controls.Add(this.panel13);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel5.Name = "flowLayoutPanel5";
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(175, 388);
+            this.flowLayoutPanel5.TabIndex = 10;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.Lab6_Ortho);
+            this.panel15.Controls.Add(this.Lab6_wireframe);
+            this.panel15.Location = new System.Drawing.Point(3, 3);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(169, 64);
+            this.panel15.TabIndex = 9;
+            // 
+            // Lab6_Ortho
+            // 
+            this.Lab6_Ortho.AutoSize = true;
+            this.Lab6_Ortho.Location = new System.Drawing.Point(6, 36);
+            this.Lab6_Ortho.Name = "Lab6_Ortho";
+            this.Lab6_Ortho.Size = new System.Drawing.Size(130, 17);
+            this.Lab6_Ortho.TabIndex = 1;
+            this.Lab6_Ortho.Text = "Ортограф. проекция";
+            this.Lab6_Ortho.UseVisualStyleBackColor = true;
+            this.Lab6_Ortho.CheckedChanged += new System.EventHandler(this.Lab6_Ortho_CheckedChanged);
+            // 
+            // Lab6_wireframe
+            // 
+            this.Lab6_wireframe.AutoSize = true;
+            this.Lab6_wireframe.Location = new System.Drawing.Point(6, 13);
+            this.Lab6_wireframe.Name = "Lab6_wireframe";
+            this.Lab6_wireframe.Size = new System.Drawing.Size(120, 17);
+            this.Lab6_wireframe.TabIndex = 0;
+            this.Lab6_wireframe.Text = "Каркасный режим";
+            this.Lab6_wireframe.UseVisualStyleBackColor = true;
+            this.Lab6_wireframe.CheckedChanged += new System.EventHandler(this.Lab6_wireframe_CheckedChanged);
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.Lab6_Selected_SZ);
+            this.panel13.Controls.Add(this.Lab6_Selected_SY);
+            this.panel13.Controls.Add(this.Lab6_Selected_SX);
+            this.panel13.Controls.Add(this.label19);
+            this.panel13.Controls.Add(this.Lab6_Selected_Roll);
+            this.panel13.Controls.Add(this.Lab6_Selected_Yaw);
+            this.panel13.Controls.Add(this.Lab6_Selected_Pitch);
+            this.panel13.Controls.Add(this.label18);
+            this.panel13.Controls.Add(this.Lab6_Selected_Z);
+            this.panel13.Controls.Add(this.Lab6_Selected_Y);
+            this.panel13.Controls.Add(this.Lab6_Selected_X);
+            this.panel13.Controls.Add(this.label17);
+            this.panel13.Controls.Add(this.Lab6_SelectedName);
+            this.panel13.Location = new System.Drawing.Point(3, 73);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(169, 137);
+            this.panel13.TabIndex = 10;
+            this.panel13.Visible = false;
+            // 
+            // Lab6_SelectedName
+            // 
+            this.Lab6_SelectedName.AutoSize = true;
+            this.Lab6_SelectedName.Location = new System.Drawing.Point(3, 0);
+            this.Lab6_SelectedName.Name = "Lab6_SelectedName";
+            this.Lab6_SelectedName.Size = new System.Drawing.Size(41, 13);
+            this.Lab6_SelectedName.TabIndex = 2;
+            this.Lab6_SelectedName.Text = "label17";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(3, 13);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(51, 13);
+            this.label17.TabIndex = 3;
+            this.label17.Text = "Позиция";
+            // 
+            // Lab6_Selected_X
+            // 
+            this.Lab6_Selected_X.DecimalPlaces = 2;
+            this.Lab6_Selected_X.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_X.Location = new System.Drawing.Point(6, 30);
+            this.Lab6_Selected_X.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_X.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_X.Name = "Lab6_Selected_X";
+            this.Lab6_Selected_X.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_X.TabIndex = 4;
+            this.Lab6_Selected_X.ValueChanged += new System.EventHandler(this.Lab6_Selected_X_ValueChanged);
+            // 
+            // Lab6_Selected_Y
+            // 
+            this.Lab6_Selected_Y.DecimalPlaces = 2;
+            this.Lab6_Selected_Y.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_Y.Location = new System.Drawing.Point(60, 30);
+            this.Lab6_Selected_Y.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_Y.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_Y.Name = "Lab6_Selected_Y";
+            this.Lab6_Selected_Y.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_Y.TabIndex = 5;
+            this.Lab6_Selected_Y.ValueChanged += new System.EventHandler(this.Lab6_Selected_Y_ValueChanged);
+            // 
+            // Lab6_Selected_Z
+            // 
+            this.Lab6_Selected_Z.DecimalPlaces = 2;
+            this.Lab6_Selected_Z.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_Z.Location = new System.Drawing.Point(114, 30);
+            this.Lab6_Selected_Z.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_Z.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_Z.Name = "Lab6_Selected_Z";
+            this.Lab6_Selected_Z.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_Z.TabIndex = 6;
+            this.Lab6_Selected_Z.ValueChanged += new System.EventHandler(this.Lab6_Selected_Z_ValueChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(3, 53);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(59, 13);
+            this.label18.TabIndex = 7;
+            this.label18.Text = "Вращение";
+            // 
+            // Lab6_Selected_Roll
+            // 
+            this.Lab6_Selected_Roll.DecimalPlaces = 2;
+            this.Lab6_Selected_Roll.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_Roll.Location = new System.Drawing.Point(114, 69);
+            this.Lab6_Selected_Roll.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_Roll.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_Roll.Name = "Lab6_Selected_Roll";
+            this.Lab6_Selected_Roll.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_Roll.TabIndex = 10;
+            this.Lab6_Selected_Roll.ValueChanged += new System.EventHandler(this.Lab6_Selected_Roll_ValueChanged);
+            // 
+            // Lab6_Selected_Yaw
+            // 
+            this.Lab6_Selected_Yaw.DecimalPlaces = 2;
+            this.Lab6_Selected_Yaw.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_Yaw.Location = new System.Drawing.Point(60, 69);
+            this.Lab6_Selected_Yaw.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_Yaw.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_Yaw.Name = "Lab6_Selected_Yaw";
+            this.Lab6_Selected_Yaw.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_Yaw.TabIndex = 9;
+            this.Lab6_Selected_Yaw.ValueChanged += new System.EventHandler(this.Lab6_Selected_Yaw_ValueChanged);
+            // 
+            // Lab6_Selected_Pitch
+            // 
+            this.Lab6_Selected_Pitch.DecimalPlaces = 2;
+            this.Lab6_Selected_Pitch.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.Lab6_Selected_Pitch.Location = new System.Drawing.Point(6, 69);
+            this.Lab6_Selected_Pitch.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_Pitch.Minimum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_Pitch.Name = "Lab6_Selected_Pitch";
+            this.Lab6_Selected_Pitch.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_Pitch.TabIndex = 8;
+            this.Lab6_Selected_Pitch.ValueChanged += new System.EventHandler(this.Lab6_Selected_Pitch_ValueChanged);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(3, 92);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(101, 13);
+            this.label19.TabIndex = 11;
+            this.label19.Text = "Масштабирование";
+            // 
+            // Lab6_Selected_SZ
+            // 
+            this.Lab6_Selected_SZ.DecimalPlaces = 2;
+            this.Lab6_Selected_SZ.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.Lab6_Selected_SZ.Location = new System.Drawing.Point(114, 108);
+            this.Lab6_Selected_SZ.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_SZ.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_SZ.Name = "Lab6_Selected_SZ";
+            this.Lab6_Selected_SZ.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_SZ.TabIndex = 14;
+            this.Lab6_Selected_SZ.ValueChanged += new System.EventHandler(this.Lab6_Selected_SZ_ValueChanged);
+            // 
+            // Lab6_Selected_SY
+            // 
+            this.Lab6_Selected_SY.DecimalPlaces = 2;
+            this.Lab6_Selected_SY.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.Lab6_Selected_SY.Location = new System.Drawing.Point(60, 108);
+            this.Lab6_Selected_SY.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_SY.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_SY.Name = "Lab6_Selected_SY";
+            this.Lab6_Selected_SY.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_SY.TabIndex = 13;
+            this.Lab6_Selected_SY.ValueChanged += new System.EventHandler(this.Lab6_Selected_SY_ValueChanged);
+            // 
+            // Lab6_Selected_SX
+            // 
+            this.Lab6_Selected_SX.DecimalPlaces = 2;
+            this.Lab6_Selected_SX.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.Lab6_Selected_SX.Location = new System.Drawing.Point(6, 108);
+            this.Lab6_Selected_SX.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.Lab6_Selected_SX.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            -2147483648});
+            this.Lab6_Selected_SX.Name = "Lab6_Selected_SX";
+            this.Lab6_Selected_SX.Size = new System.Drawing.Size(48, 20);
+            this.Lab6_Selected_SX.TabIndex = 12;
+            this.Lab6_Selected_SX.ValueChanged += new System.EventHandler(this.Lab6_Selected_SX_ValueChanged);
             // 
             // Form1
             // 
@@ -863,6 +1208,21 @@ namespace ogl2
             ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            this.flowLayoutPanel5.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
+            this.panel15.PerformLayout();
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_X)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Y)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Z)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Roll)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Yaw)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_Pitch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SZ)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Lab6_Selected_SX)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -934,6 +1294,24 @@ namespace ogl2
         private System.Windows.Forms.TrackBar trackBar3;
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.CheckBox Lab6_Ortho;
+        private System.Windows.Forms.CheckBox Lab6_wireframe;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_SZ;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_SY;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_SX;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_Roll;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_Yaw;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_Pitch;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_Z;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_Y;
+        private System.Windows.Forms.NumericUpDown Lab6_Selected_X;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label Lab6_SelectedName;
     }
 }
 

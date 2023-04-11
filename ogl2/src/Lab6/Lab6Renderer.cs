@@ -8,11 +8,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ogl2.Scene;
 
 namespace ogl2.src.Lab6
 {
     internal class Lab6Renderer
     {
+        
+
+
         public CommonRenderer CommonRenderer;
         private Lab6Controller _controller;
 
@@ -20,9 +24,11 @@ namespace ogl2.src.Lab6
         private int _vbo;
         private int _ebo;
         private int _fbo;
-        private int _program = 0;
+        private int _lightShader = 0;
+        private int _outlineShader = 0;
         private bool _shaderLoaded = false;
         private int[] _textures = new int[3];
+        private Matrix4 _projection;
 
         public Lab6Renderer(CommonRenderer commonRenderer, Lab6Controller controller)
         {
@@ -46,7 +52,7 @@ namespace ogl2.src.Lab6
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8i, size.Width, size.Height, 0, PixelFormat.RedInteger, PixelType.Int, IntPtr.Zero);
 
             GL.BindTexture(TextureTarget.Texture2D, _textures[2]);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.DepthComponent, size.Width, size.Height, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Depth24Stencil8, size.Width, size.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt248, IntPtr.Zero);
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
@@ -54,6 +60,7 @@ namespace ogl2.src.Lab6
 
         public void Init()
         {
+            GL.Enable(EnableCap.StencilTest);
             GL.EnableClientState(ArrayCap.VertexArray);
             _vao = GL.GenVertexArray();
             _vbo = GL.GenBuffer();
@@ -75,11 +82,14 @@ namespace ogl2.src.Lab6
 
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, _textures[0], 0);
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, _textures[1], 0);
-            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, _textures[2], 0);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, _textures[2], 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+            SetProjection(_controller.Scene.Projection);
+
         }
 
-        public void LoadShaders(string vertex, string fragment)
+        public void LoadShaders(string vertex, string fragment,string outline)
         {
             int shader = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(shader, vertex);
@@ -87,16 +97,26 @@ namespace ogl2.src.Lab6
             Console.WriteLine("Shader log:");
             Console.WriteLine(GL.GetShaderInfoLog(shader));
             int shader2 = GL.CreateShader(ShaderType.FragmentShader);
+            int shader3 = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(shader2, fragment);
+            GL.ShaderSource(shader3, outline);
             GL.CompileShader(shader2);
+            GL.CompileShader(shader3);
             Console.WriteLine(GL.GetShaderInfoLog(shader2));
+            Console.WriteLine(GL.GetShaderInfoLog(shader3));
             int program = GL.CreateProgram();
+            int program2 = GL.CreateProgram();
             GL.AttachShader(program, shader);
+            GL.AttachShader(program2, shader);
+            GL.AttachShader(program2, shader3);
             GL.AttachShader(program, shader2);
             GL.LinkProgram(program);
+            GL.LinkProgram(program2);
             Console.WriteLine("Program");
             Console.WriteLine(GL.GetProgramInfoLog(program));
-            _program = program;
+            Console.WriteLine(GL.GetProgramInfoLog(program2));
+            _lightShader = program;
+            _outlineShader = program2;
             _shaderLoaded = true;
 
         }
@@ -112,25 +132,38 @@ namespace ogl2.src.Lab6
             return pixels[0];
         }
 
-        public void Render()
+        public void SetProjection(ProjectionEnum projection)
         {
-            var scene = _controller.Scene;
-            var size = CommonRenderer.GetSize();
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.PushMatrix();
-            GL.Enable(EnableCap.DepthTest);
-            var perspectiveMatrix = Matrix4.CreatePerspectiveFieldOfView(
+            switch (projection)
+            {
+                case ProjectionEnum.Perspective:
+                    _projection = Matrix4.CreatePerspectiveFieldOfView(
                 MathHelper.DegreesToRadians(30.0f),
                 CommonRenderer.AspectRatio,
                 0.1f,
                 100.0f);
-            GL.LoadMatrix(ref perspectiveMatrix);
+                    break;
+                case ProjectionEnum.Orthographic:
+                    _projection = Matrix4.CreateOrthographic(_controller.Scene.CameraDistance, _controller.Scene.CameraDistance/CommonRenderer.AspectRatio, 0.1f, 100f);
+                    break;
+            }            
+        }
+
+
+        public void Render()
+        {
+            GL.Enable(EnableCap.DepthTest);
+
+            var scene = _controller.Scene;
+            var size = CommonRenderer.GetSize();
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.PushMatrix();         
+            GL.LoadMatrix(ref _projection);
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
-
             var view = Matrix4.LookAt(scene.CameraDirection * scene.CameraDistance + scene.CameraFocus, scene.CameraFocus, Vector3.UnitY);
-            //modelView = Matrix4.CreateTranslation(0, 0, -surface.Size/2)*modelView;
             GL.LoadMatrix(ref view);
 
 
@@ -149,7 +182,9 @@ namespace ogl2.src.Lab6
 
             GL.DrawBuffers(drawBuffersEnum.Length, drawBuffersEnum);
 
-            foreach (SceneObject sceneObject in scene.Objects)
+
+
+            foreach (SceneObject sceneObject in scene.Objects.OrderBy(x=>x.Id==scene.SelectedId?0:1))
             {
                 var mesh = sceneObject.Mesh;
 
@@ -157,6 +192,15 @@ namespace ogl2.src.Lab6
                 var model = Matrix4.CreateScale(sceneObject.AbsScale) * Matrix4.CreateFromQuaternion(sceneObject.Rotation) *
 
                     Matrix4.CreateTranslation(sceneObject.Position);
+
+                bool outlined = sceneObject.Id == scene.SelectedId;
+
+                if (outlined)
+                {
+                    GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                }
+
 
                 GL.BindVertexArray(_vao);
 
@@ -173,23 +217,65 @@ namespace ogl2.src.Lab6
 
                 GL.EnableVertexAttribArray(2);
                 GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 10 * sizeof(float), 6 * sizeof(float));
-                GL.UseProgram(_program);
-                
-                GL.BindAttribLocation(_program, 0, "vertexPosition");
-                GL.BindAttribLocation(_program, 1, "normal");
-                GL.BindAttribLocation(_program, 2, "color");
-                var vp = view * perspectiveMatrix;
-                GL.UniformMatrix4(GL.GetUniformLocation(_program, "mMatrix"), false, ref model);
-                GL.UniformMatrix4(GL.GetUniformLocation(_program, "vpMatrix"), false, ref vp);
-                GL.Uniform1(GL.GetUniformLocation(_program, "id"),sceneObject.Id);
-                GL.Uniform3(GL.GetUniformLocation(_program, "lightSource"), new Vector3(2,2,2));
 
+                var vp = view * _projection;
+
+                int mainShader = scene.WireframeMode ? _outlineShader : _lightShader;
+
+                GL.UseProgram(mainShader);
+                
+                GL.BindAttribLocation(mainShader, 0, "vertexPosition");
+                GL.BindAttribLocation(mainShader, 1, "normal");
+                GL.BindAttribLocation(mainShader, 2, "color");
+                
+                GL.UniformMatrix4(GL.GetUniformLocation(mainShader, "mMatrix"), false, ref model);
+                GL.UniformMatrix4(GL.GetUniformLocation(mainShader, "vpMatrix"), false, ref vp);
+                              
+                if(scene.WireframeMode)
+                {
+                    GL.Uniform4(GL.GetUniformLocation(mainShader, "color"), Utility.ConvertColor(Color.White));
+                    GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                }
+                    
+                else
+                {
+                    GL.Uniform3(GL.GetUniformLocation(mainShader, "lightSource"), scene.LightPosition);
+                    GL.Uniform1(GL.GetUniformLocation(mainShader, "id"), sceneObject.Id);
+                }
+                    
                 GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+
+
+                if (outlined && !scene.WireframeMode)
+                {
+                    GL.DepthRange(0, 0.5);
+                    GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                    GL.StencilMask(0x00);
+ 
+                    //GL.DepthMask(false);
+                    model = Matrix4.CreateScale(1 + 0.02f/sceneObject.AbsScale.X, 1 + 0.02f / sceneObject.AbsScale.Y, 1 + 0.02f / sceneObject.AbsScale.Z) * model;
+                    GL.UseProgram(_outlineShader);
+                    GL.BindAttribLocation(_outlineShader, 0, "vertexPosition");
+                    GL.BindAttribLocation(_outlineShader, 1, "normal");
+                    GL.BindAttribLocation(_outlineShader, 2, "color");
+                    GL.UniformMatrix4(GL.GetUniformLocation(_outlineShader, "mMatrix"), false, ref model);
+                    GL.UniformMatrix4(GL.GetUniformLocation(_outlineShader, "vpMatrix"), false, ref vp);
+                    GL.Uniform4(GL.GetUniformLocation(_outlineShader, "color"), Utility.ConvertColor(Color.Orange));
+
+                    GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
+
+                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                    GL.StencilMask(0xFF);
+                    //GL.DepthMask(true);
+
+                }
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
                 GL.UseProgram(0);
                 GL.BindVertexArray(0);
-               
+                GL.DepthRange(0.5, 1);
+                
             }
 
             GL.DrawBuffer(DrawBufferMode.ColorAttachment0);

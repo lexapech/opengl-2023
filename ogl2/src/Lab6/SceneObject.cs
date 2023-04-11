@@ -17,6 +17,19 @@ namespace ogl2
         public Quaternion Rotation;
         public Vector3 AbsScale;
         public readonly int Id;
+        private Vector3 _eulerAngles;
+        public Vector3 EulerAngles {
+            get
+            {
+                return _eulerAngles;
+            }
+            set
+            {
+                Rotation = Quaternion.FromEulerAngles(value);
+                _eulerAngles = value;
+            }
+        }
+
 
         public SceneObject(string name,MeshGenerator generator, int id)
         {

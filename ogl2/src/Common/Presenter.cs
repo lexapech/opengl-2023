@@ -51,9 +51,9 @@ namespace ogl2
             _renderer.Resize();
         }
 
-        public void MouseDown(Vector2 point)
+        public void MouseDown(Vector2 point,bool leftButton, bool rightButton, bool shift)
         {
-            _currentLab.MouseDown(point);
+            _currentLab.MouseDown(point, leftButton, rightButton, shift);
             _previousMousePosition = point;
         }
         

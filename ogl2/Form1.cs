@@ -17,14 +17,59 @@ namespace ogl2
     using static AttributeMappings;
     public partial class Form1 : Form
     {
-        private readonly Presenter _presenter; 
+        private readonly Presenter _presenter;
+        private bool _selectedEvent = true;
         public Form1()
         {
             _presenter = new Presenter();         
             _presenter.Lab4.CursorChangeHandler += SetCursor;
-            
+            _presenter.Lab6.SelectionChanged += UpdateSelectedInfo;
+
+
             InitializeComponent();         
         }
+
+        private void UpdateSelectedInfo(SceneObject sceneObject)
+        {
+            
+            panel13.Visible = sceneObject != null;
+            if (sceneObject == null) return;
+            _selectedEvent = false;
+            Lab6_SelectedName.Text = "Выбранный объект: "+ sceneObject.Name;
+            Lab6_Selected_X.Value = (decimal)sceneObject.Position.X;
+            Lab6_Selected_Y.Value = (decimal)sceneObject.Position.Y;
+            Lab6_Selected_Z.Value = (decimal)sceneObject.Position.Z;
+
+            Lab6_Selected_Pitch.Value = (decimal)(sceneObject.EulerAngles.X * 180f / Math.PI);
+            Lab6_Selected_Yaw.Value = (decimal)(sceneObject.EulerAngles.Y * 180f / Math.PI);
+            Lab6_Selected_Roll.Value = (decimal)(sceneObject.EulerAngles.Z * 180f / Math.PI);
+
+            Lab6_Selected_SX.Value = (decimal)sceneObject.AbsScale.X;
+            Lab6_Selected_SY.Value = (decimal)sceneObject.AbsScale.Y;
+            Lab6_Selected_SZ.Value = (decimal)sceneObject.AbsScale.Z;
+            _selectedEvent = true;
+        }
+
+        private void ChangeSelectedProps()
+        {
+            if (!_selectedEvent) return;
+            Vector3 pos;
+            Vector3 angles;
+            Vector3 scale;
+            pos.X = (float)Lab6_Selected_X.Value;
+            pos.Y = (float)Lab6_Selected_Y.Value;
+            pos.Z = (float)Lab6_Selected_Z.Value;
+
+            angles.X = (float)((float)Lab6_Selected_Pitch.Value  / 180f * Math.PI);
+            angles.Y = (float)((float)Lab6_Selected_Yaw.Value /  180f * Math.PI);
+            angles.Z = (float)((float)Lab6_Selected_Roll.Value / 180f * Math.PI);
+
+            scale.X = (float)Lab6_Selected_SX.Value;
+            scale.Y = (float)Lab6_Selected_SY.Value;
+            scale.Z = (float)Lab6_Selected_SZ.Value;
+            _presenter.Lab6.UpdateSelected(pos,angles, scale);
+        }
+
 
         private void InitComboBoxes()
         {
@@ -66,7 +111,7 @@ namespace ogl2
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.Location.X, glControl1.ClientSize.Height - e.Location.Y);
-            _presenter.MouseDown(pos);
+            _presenter.MouseDown(pos, (e.Button & MouseButtons.Left) != 0, (e.Button & MouseButtons.Right) != 0, (ModifierKeys & Keys.Shift) != 0);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -260,6 +305,61 @@ namespace ogl2
         private void glControl1_Scroll(object sender, ScrollEventArgs e)
         {
 
+        }
+
+        private void Lab6_wireframe_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.SetWireframe(Lab6_wireframe.Checked);
+        }
+
+        private void Lab6_Ortho_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.SetOrthographic(Lab6_Ortho.Checked);
+        }
+
+        private void Lab6_Selected_X_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_Y_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_Z_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_Pitch_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_Yaw_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_Roll_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_SX_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_SY_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Selected_SZ_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
         }
     }
 }

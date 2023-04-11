@@ -37,7 +37,7 @@ namespace ogl2.src.Lab5
             _loaded = true;
         }
 
-        public void MouseDown(Vector2 pos)
+        public void MouseDown(Vector2 pos, bool leftButton, bool rightButton, bool shift)
         {
 
         }

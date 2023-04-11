@@ -22,7 +22,7 @@ namespace ogl2.src.Lab4
             _renderer = new Lab4Renderer(renderer, this);
         }
 
-        public void MouseDown(Vector2 pos)
+        public void MouseDown(Vector2 pos, bool leftButton, bool rightButton, bool shift)
         {
             var pointIndex = _spline.NearControlPoint(Utility.ConvertMousePos(pos, _renderer.CommonRenderer.GetSize()));
             if (pointIndex != -1)

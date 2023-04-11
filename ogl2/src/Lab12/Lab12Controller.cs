@@ -40,7 +40,7 @@ namespace ogl2
             _renderer = new Lab12Renderer(commonRenderer, this);
         }
 
-        void ILab.MouseDown(Vector2 pos)
+        void ILab.MouseDown(Vector2 pos, bool leftButton, bool rightButton, bool shift)
         {          
             if (_mode == MouseMode.Drawing)
                 _state.Vertices.Add(Utility.ConvertMousePos(pos, _renderer.CommonRenderer.GetSize()));          

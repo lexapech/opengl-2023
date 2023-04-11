@@ -12,17 +12,42 @@ namespace ogl2
 {
     internal class Scene
     {
+        public enum ProjectionEnum
+        {
+            Perspective, Orthographic
+        }
+
+        public ProjectionEnum Projection;
         public List<SceneObject> Objects = new List<SceneObject>();
         public bool ShowAxis = true;
         public Vector3 CameraFocus;
         public float CameraDistance;
         public Vector2 CameraAngle;
         private int _lastId = 1;
+        private int _selectedId = 0;
+        public bool WireframeMode = false;
+        public Vector3 LightPosition = new Vector3(100, 100, 100);
+
+        public SceneObject SelectedObject{
+            get
+            {
+                var match = Objects.Where(Object => Object.Id == _selectedId).ToList();
+                if (match.Count() > 0)
+                {
+                    return match[0];
+                }
+                return null;
+            }
+        }
+
+
+        public int SelectedId { get { return _selectedId; }}
 
         public Scene()
         {
             CameraDistance = 2;
             CameraFocus = Vector3.Zero;
+            Projection = ProjectionEnum.Perspective;
         }
 
         public SceneObject AddObject(string name, MeshGenerator generator, Vector3 pos)
@@ -32,6 +57,25 @@ namespace ogl2
             Objects.Add(obj);
             return obj;
         }
+
+        public void SelectObject(int id)
+        {
+            var match = Objects.Where(Object => Object.Id == id).ToList();
+            if(match.Count() > 0) _selectedId = match[0].Id;
+            else _selectedId = 0;
+        }
+
+        public void UpdateSelected(Vector3 pos, Vector3 rotation, Vector3 scale)
+        {
+            var obj = SelectedObject;
+            if(obj != null)
+            {
+                obj.Position = pos;
+                obj.EulerAngles = rotation;
+                obj.AbsScale = scale;
+            }         
+        }
+
 
         public SceneObject GetObject(string name)
         {
