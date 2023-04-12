@@ -13,7 +13,7 @@ void main()
 {
 	vec3 dir_to_point = normalize(lightSource - vertexPos);
 	vec3 dir_to_camera = normalize(cameraPos - vertexPos);
-	vec3 reflectDir = reflect(-dir_to_point, vertexNormal);
+	vec3 reflectDir = reflect(-dir_to_point, normalize(vertexNormal));
 	float specularAngle = max(dot(reflectDir, dir_to_camera), 0.0);
     float scalar_product = dot(vertexNormal, dir_to_point);
 	vec3 diffuse = vertexColor.rgb * (0.5 + max(0.0,scalar_product) * 0.5);
