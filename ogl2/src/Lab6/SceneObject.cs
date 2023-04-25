@@ -1,4 +1,5 @@
 ﻿using ogl2.src.Lab6;
+using ogl2;
 using OpenTK;
 using OpenTK.Graphics.ES11;
 using System;
@@ -15,6 +16,7 @@ namespace ogl2
     {
         public string Name { get; private set; }
         public Mesh Mesh { get; private set; }
+        public Material Material;
         public Vector3 Position;
         public Quaternion Rotation;
         public Vector3 AbsScale;
@@ -60,6 +62,12 @@ namespace ogl2
             _generator = generator;    
             Mesh = generator.GetMesh();
             Id = id;
+            Material = new Material
+            {
+                Specular = new Vector4(1, 1, 1, 1),
+                Emission = new Vector4(0,0, 0, 1),
+                Shininess = 100
+            };
         }
 
 

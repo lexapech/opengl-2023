@@ -2,6 +2,7 @@
 using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,9 @@ namespace ogl2
         private int _selectedId = 0;
         public bool WireframeMode = false;
         public bool Transparent = false;
-        public Vector3 LightPosition = new Vector3(10, 10, 10);
+        public bool UseShader = false;
+        public Light Light;
+        public Vector3 LightPosition { get { return Light.Position.Xyz; } }
 
         public SceneObject SelectedObject{
             get
@@ -67,7 +70,7 @@ namespace ogl2
             else _selectedId = 0;
         }
 
-        public void UpdateSelected(Vector3 pos, Vector3 rotation, Vector3 scale,int steps)
+        public void UpdateSelected(Vector3 pos, Vector3 rotation, Vector3 scale,int steps,Color specular, Color emission, float shinihess)
         {
             var obj = SelectedObject;
             if(obj != null)
@@ -76,6 +79,9 @@ namespace ogl2
                 obj.EulerAngles = rotation;
                 obj.AbsScale = scale;
                 obj.Steps = steps;
+                obj.Material.Shininess = shinihess;
+                obj.Material.Specular = Utility.ConvertColor(specular);
+                obj.Material.Emission = Utility.ConvertColor(emission);
             }         
         }
 

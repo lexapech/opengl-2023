@@ -47,6 +47,11 @@ namespace ogl2
             Lab6_Selected_SX.Value = (decimal)sceneObject.AbsScale.X;
             Lab6_Selected_SY.Value = (decimal)sceneObject.AbsScale.Y;
             Lab6_Selected_SZ.Value = (decimal)sceneObject.AbsScale.Z;
+
+            Lab6_Shininess.Value = (decimal)sceneObject.Material.Shininess;
+
+            panel19.BackColor = Utility.ConvertColor(sceneObject.Material.Specular);
+            panel20.BackColor = Utility.ConvertColor(sceneObject.Material.Emission);
             if (sceneObject.Steps < 3)
             {
                 label20.Visible = false;
@@ -78,7 +83,13 @@ namespace ogl2
             scale.X = (float)Lab6_Selected_SX.Value;
             scale.Y = (float)Lab6_Selected_SY.Value;
             scale.Z = (float)Lab6_Selected_SZ.Value;
-            _presenter.Lab6.UpdateSelected(pos,angles, scale,(int)Lab6_Division.Value);
+
+            Color specular = panel19.BackColor;
+            Color emission = panel20.BackColor;
+
+            float shininess = (float)Lab6_Shininess.Value;
+
+            _presenter.Lab6.UpdateSelected(pos,angles, scale,(int)Lab6_Division.Value, specular,emission,shininess);
         }
 
 
@@ -386,6 +397,153 @@ namespace ogl2
         private void Lab6_CoordAxis_CheckedChanged(object sender, EventArgs e)
         {
             _presenter.Lab6.SetCoordAxis(Lab6_CoordAxis.Checked);
+        }
+
+        private void Lab6_Shader_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.EnableShader(Lab6_Shader.Checked);
+        }
+
+        private void panel14_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel14_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            panel14.BackColor = colorDialog1.Color;
+            _presenter.Lab6.SetLightColors(panel14.BackColor, panel17.BackColor, panel18.BackColor);
+        }
+
+        private void panel17_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            panel17.BackColor = colorDialog1.Color;
+            _presenter.Lab6.SetLightColors(panel14.BackColor, panel17.BackColor, panel18.BackColor);
+        }
+
+        private void panel18_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            panel18.BackColor = colorDialog1.Color;
+            _presenter.Lab6.SetLightColors(panel14.BackColor, panel17.BackColor, panel18.BackColor);
+        }
+
+        private void SetLightPos()
+        {
+            Vector4 pos;
+            pos.X = (float)numericUpDown11.Value;
+            pos.Y = (float)numericUpDown10.Value;
+            pos.Z = (float)numericUpDown9.Value;
+            pos.W = (float)numericUpDown2.Value;
+            _presenter.Lab6.SetLightPosition(pos);
+        }
+        private void SetLightDir()
+        {
+            Vector3 pos;
+            pos.X = (float)numericUpDown8.Value;
+            pos.Y = (float)numericUpDown7.Value;
+            pos.Z = (float)numericUpDown6.Value;
+            _presenter.Lab6.SetLightDirection(pos);
+        }
+
+        private void numericUpDown11_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightPos();
+            SetLightDir();
+        }
+
+        private void numericUpDown10_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightPos();
+            SetLightDir();
+        }
+
+        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightPos();
+            SetLightDir();
+        }
+
+        private void numericUpDown8_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightDir();
+        }
+
+        private void numericUpDown7_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightDir();
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightDir();
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            //W
+            SetLightPos();
+        }
+
+        private void panel19_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            panel19.BackColor = colorDialog1.Color;
+            ChangeSelectedProps();
+        }
+
+        private void panel20_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            panel20.BackColor = colorDialog1.Color;
+            ChangeSelectedProps();
+        }
+
+        private void Lab6_Shininess_ValueChanged(object sender, EventArgs e)
+        {
+            ChangeSelectedProps();
+        }
+
+        private void SetLightProps()
+        {
+            float exp = (float)numericUpDown3.Value;
+            float cutoff = (float)numericUpDown4.Value;
+            float conAtt = (float)numericUpDown5.Value;
+            float linAtt = (float)numericUpDown12.Value;
+            float quadAtt = (float)numericUpDown13.Value;
+            _presenter.Lab6.SetLightProps(exp, cutoff,conAtt,linAtt,quadAtt);
+        }
+
+        private void Lab7_LightOn_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.Lab6.EnableLight(Lab7_LightOn.Checked);
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightProps();
+        }
+
+        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightProps();
+        }
+
+        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightProps();
+        }
+
+        private void numericUpDown12_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightProps();
+        }
+
+        private void numericUpDown13_ValueChanged(object sender, EventArgs e)
+        {
+            SetLightProps();
         }
     }
 }

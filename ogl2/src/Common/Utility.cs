@@ -27,6 +27,10 @@ namespace ogl2
         {
             return new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
         }
+        public static Color ConvertColor(Vector4 color)
+        {
+            return Color.FromArgb(((int)(color.X * 255f)) + ((int)(color.Y * 255f)<<8) + ((int)(color.Z * 255f)<<16) + (255<<24));
+        }
 
         public static float Clamp(float value,float min,float max) 
         {

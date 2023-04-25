@@ -85,6 +85,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Common\Material.cs" />
     <Compile Include="src\Lab3\Fractal.cs" />
     <Compile Include="src\Common\ILab.cs" />
     <Compile Include="src\Lab12\Lab12Renderer.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Lab12\RendererState.cs" />
     <Compile Include="src\Lab6\CubeGenerator.cs" />
+    <Compile Include="src\Lab6\Light.cs" />
     <Compile Include="src\Lab6\MeshGenerator.cs" />
     <Compile Include="src\Lab6\CylinderGenerator.cs" />
     <Compile Include="src\Lab6\PipeGenerator.cs" />

@@ -13,6 +13,7 @@ using static ogl2.Scene;
 
 namespace ogl2.src.Lab6
 {
+   
     internal class Lab6Renderer
     {
         
@@ -63,7 +64,9 @@ namespace ogl2.src.Lab6
         public void Init()
         {
             GL.Enable(EnableCap.StencilTest);
-            GL.EnableClientState(ArrayCap.VertexArray);
+            float[] ambientColor = new float[4] {1, 0, 0, 0};
+            //GL.LightModel(LightModelParameter.LightModelAmbient,ambientColor);
+            GL.Enable(EnableCap.Normalize);
             _vao = GL.GenVertexArray();
             _vbo = GL.GenBuffer();
             _ebo = GL.GenBuffer();
@@ -151,21 +154,46 @@ namespace ogl2.src.Lab6
             }            
         }
 
+        private void SetupLight(Light light)
+        {
+            GL.Light(LightName.Light0, LightParameter.Position, light.Position);
+            GL.Light(LightName.Light0, LightParameter.Ambient, light.Ambient);
+            GL.Light(LightName.Light0, LightParameter.Specular, light.Specular);
+            GL.Light(LightName.Light0, LightParameter.SpotExponent, light.SpotExponent);
+            GL.Light(LightName.Light0, LightParameter.SpotCutoff, light.SpotCutoff);
+            GL.Light(LightName.Light0, LightParameter.LinearAttenuation, light.LinearAttenuation);
+            GL.Light(LightName.Light0, LightParameter.ConstantAttenuation, light.ConstantAttenuation);
+            GL.Light(LightName.Light0, LightParameter.QuadraticAttenuation, light.QuadraticAttenuation);
+            GL.Light(LightName.Light0, LightParameter.Diffuse, light.Diffuse);
+            GL.Light(LightName.Light0, LightParameter.SpotDirection, light.SpotDirection);
+
+            if (light.Enabled) 
+                GL.Enable(EnableCap.Light0);
+            else 
+                GL.Disable(EnableCap.Light0);
+
+        }
 
         public void Render()
         {
             GL.Enable(EnableCap.DepthTest);
-
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
             var scene = _controller.Scene;
-            var view = LoadMatricesAndGetView(scene);
+            GL.Enable(EnableCap.Lighting);
 
+          
+            var view = LoadMatricesAndGetView(scene);
+           
             ClearFramebuffer();
+
+            SetupLight(scene.Light);
 
             foreach (SceneObject sceneObject in scene.Objects.OrderBy(x=>x.Id == scene.SelectedId?0:1))
             {
                 DrawObject(sceneObject, scene, view);
             }
-           
+            GL.Disable(EnableCap.Lighting);
             if (scene.ShowAxis) DrawAxis();
 
             CopyFramebuffer();
@@ -173,6 +201,7 @@ namespace ogl2.src.Lab6
 
             GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
             GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.Light0);
         }
 
         private void ClearFramebuffer()
@@ -206,40 +235,73 @@ namespace ogl2.src.Lab6
             return view;
         }
 
-        private void BindVAO(Mesh mesh)
-        {
+        private void BindVAO(Mesh mesh,bool shader)
+        {                             
             GL.BindVertexArray(_vao);
-
+            
+            
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * mesh.Vertices.Length, mesh.Vertices, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * mesh.Vertices.Length, mesh.Vertices, BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * mesh.Indices.Length, mesh.Indices, BufferUsageHint.DynamicDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * mesh.Indices.Length, mesh.Indices, BufferUsageHint.StaticDraw);
 
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 10 * sizeof(float), 0);
+            GL.EnableClientState(ArrayCap.VertexArray);
+            GL.VertexPointer(3, VertexPointerType.Float, 10 * sizeof(float), 0);
+
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 10 * sizeof(float), 3 * sizeof(float));
+            GL.EnableClientState(ArrayCap.NormalArray);
+            GL.NormalPointer(NormalPointerType.Float, 10 * sizeof(float), 3 * sizeof(float));
 
-            GL.EnableVertexAttribArray(2);
-            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 10 * sizeof(float), 6 * sizeof(float));
+            GL.EnableClientState(ArrayCap.ColorArray);
+            if(shader)
+            {
+                GL.EnableVertexAttribArray(2);
+                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 10 * sizeof(float), 6 * sizeof(float));
+            }
+            else
+            {
+                GL.DisableVertexAttribArray(2);
+            }
+            GL.ColorPointer(4, ColorPointerType.Float, 10 * sizeof(float), 6 * sizeof(float));
+
+            
 
         }
 
         private void DrawObject(SceneObject sceneObject,Scene scene,Matrix4 view)
         {
             var mesh = sceneObject.Mesh;
-
+            
             var model = Matrix4.CreateScale(sceneObject.AbsScale) * Matrix4.CreateFromQuaternion(sceneObject.Rotation) *
                 Matrix4.CreateTranslation(sceneObject.Position);
+
+            GL.MatrixMode(MatrixMode.Modelview);           
+
+            GL.PushMatrix();
+
+            var modelView = model * view;
+            GL.LoadMatrix(ref modelView);
+
+            
 
             bool outlined = sceneObject.Id == scene.SelectedId;                
             var vp = view * _projection;
             int mainShader = scene.WireframeMode ? _outlineShader : _lightShader;
 
-            BindVAO(mesh);
+           // GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Ambient, sceneObject.Material.Ambient);
+            GL.Enable(EnableCap.ColorMaterial);
+            // GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, sceneObject.Material.Diffuse);
+            GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, sceneObject.Material.Specular);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, sceneObject.Material.Shininess);
+            GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Emission, sceneObject.Material.Emission);
 
-            GL.UseProgram(mainShader);
+            BindVAO(mesh,scene.UseShader);
+            if (scene.UseShader) GL.UseProgram(mainShader);
             GL.BindAttribLocation(mainShader, 0, "vertexPosition");
             GL.BindAttribLocation(mainShader, 1, "normal");
             GL.BindAttribLocation(mainShader, 2, "color");
@@ -269,10 +331,13 @@ namespace ogl2.src.Lab6
                 GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             }
 
-
             GL.DrawElements(mesh.PrimitiveType, mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            GL.DisableClientState( ArrayCap.VertexArray);
+            GL.DisableClientState(ArrayCap.NormalArray);
+
+            //DrawCube();
 
             GL.Disable(EnableCap.Blend);
 
@@ -296,6 +361,7 @@ namespace ogl2.src.Lab6
                 GL.StencilMask(0xFF);
 
             }
+            GL.PopMatrix();
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
             GL.UseProgram(0);

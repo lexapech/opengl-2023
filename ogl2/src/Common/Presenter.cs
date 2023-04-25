@@ -74,6 +74,7 @@ namespace ogl2
                 case 3: _currentLab = Lab4; break;
                 case 4: _currentLab = Lab5; break;
                 case 5: _currentLab = Lab6; break;
+                case 6: _currentLab = Lab6; break;
                 default: break;
             }
             _currentLab.Activate();

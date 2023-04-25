@@ -25,6 +25,7 @@ namespace ogl2.src.Lab6
 
         protected List<Triangle> _triangles;
         protected Vector4 _color;
+        public Vector4 ObjectColor { get { return _color; } }
 
         abstract public void Generate();
 

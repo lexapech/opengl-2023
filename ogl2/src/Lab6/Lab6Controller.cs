@@ -26,7 +26,21 @@ namespace ogl2.src.Lab6
             _scene = new Scene
             {
                 CameraAngle = new Vector2((float)(90 / 180f * Math.PI), (float)(0 / 180f * Math.PI)),
-                CameraDistance = 15
+                CameraDistance = 15,
+                Light = new Light 
+                {
+                    Enabled = true,
+                    Position = new Vector4(10, 10, 10, 0),
+                    Ambient = new Vector4(0, 0, 0, 1),
+                    Diffuse = new Vector4(1, 1, 1, 1f),
+                    Specular = new Vector4(1, 1, 1, 1),
+                    SpotDirection = new Vector4(-1, -1, -1, 1).Normalized(),
+                    SpotCutoff = 180,
+                    SpotExponent = 0,
+                    ConstantAttenuation = 1,
+                    LinearAttenuation = 0,
+                    QuadraticAttenuation = 0
+                }
             };
             InitScene();
         }
@@ -179,11 +193,53 @@ namespace ogl2.src.Lab6
             Paint();
         }
 
+        public void EnableShader(bool enabled)
+        {
+            _scene.UseShader = enabled;
+            Paint();
+        }
 
-        public void UpdateSelected(Vector3 pos,Vector3 rotation,Vector3 scale,int steps)
+        public void SetLightColors(Color ambient,Color diffuse, Color specular)
+        {
+            _scene.Light.Ambient = Utility.ConvertColor(ambient);
+            _scene.Light.Diffuse = Utility.ConvertColor(diffuse);
+            _scene.Light.Specular = Utility.ConvertColor(specular);
+            Paint();
+        }
+
+        public void SetLightPosition(Vector4 vector)
+        {
+            _scene.Light.Position = vector;
+            Paint();
+        }
+
+        public void SetLightDirection(Vector3 pos)
+        {
+            _scene.Light.SpotDirection =new Vector4( (pos- _scene.Light.Position.Xyz).Normalized());
+            Paint();
+        }
+
+        public void EnableLight(bool enabled)
+        {
+            _scene.Light.Enabled = enabled;
+            Paint();
+        }
+
+        public void SetLightProps(float exp,float cutoff,float conAtt,float linAtt,float quadAtt)
+        {
+            if (cutoff > 90) cutoff = 180;
+            _scene.Light.SpotExponent = exp;
+            _scene.Light.SpotCutoff = cutoff;
+            _scene.Light.ConstantAttenuation = conAtt;
+            _scene.Light.LinearAttenuation = linAtt;
+            _scene.Light.QuadraticAttenuation = quadAtt;
+            Paint();
+        }
+
+        public void UpdateSelected(Vector3 pos,Vector3 rotation,Vector3 scale,int steps,Color specular, Color emission, float shinihess)
         {
             if(steps<3) steps = 3;
-            _scene.UpdateSelected(pos, rotation, scale, steps);
+            _scene.UpdateSelected(pos, rotation, scale, steps, specular, emission, shinihess);
             Paint();
         }
     }
